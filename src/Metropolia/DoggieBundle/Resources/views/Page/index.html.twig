@@ -36,6 +36,7 @@
               var sidebarItem; 
               var latLngList = [];
               var markerID = 0;
+              var serviceMapMatches = [];
               //var placeItem = $('<div class="place-item"></div>');
               //var geocoder;
              
@@ -53,8 +54,10 @@
                   event.preventDefault();
                   var searchInput = $("#search-box").val();
                   var convertedInput = searchInput.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
+                  console.log(convertedInput);
                   
-                  search(convertedInput);  
+                  searchFromServiceMap(convertedInput);
+                //searchFromServiceMap(searchInput);
                 });
                 
                 $( "#search-box" ).autocomplete({
@@ -63,14 +66,43 @@
 
             });
             
-            function search(input){
-                //console.log(input);
+            function searchFromServiceMap(input){
+                
+                /*
+                serviceMapMatches = [];
+                 $.each( serviceMapResults, function( key, value ) {
+                     
+                     var thisObjectName = value.name_fi;
+                     
+                     if(thisObjectName.indexOf(input) !== -1){
+                         serviceMapMatches.push(value);
+                     }
+                    });
+                
+                    console.log("Service map search matches:");
+                    console.log(serviceMapMatches);
+                     
+                  */
+                
+                
                 $.ajax({
                       url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+input+'',
                       dataType: 'json',
-                      'success': processResults  
+                      'success': processServiceMapResults  
                 });
+                
+                
+                
+                
+                
             }
+            
+            
+            function searchFromGoogleMaps(){
+                
+            }
+            
+            
             
             $("#dog-parks-button").click(function() {
               getDogParks();
@@ -86,7 +118,7 @@
             
             var myVar;
             
-            function processResults(data){
+            function processServiceMapResults(data){
                 console.log(data);
                 
                 if(markers.length > 0){
@@ -127,11 +159,11 @@
                         //var thisInfoMarker = marker.get(markerID);
                         //console.log(thisInfoMarker);
                         var thismarker = markers[placeInfoID];
-
-                        map.setZoom(15);
-                        map.setCenter(thismarker.getPosition());
                         
-                        
+                        if(thismarker){
+                            map.setZoom(15);
+                            map.setCenter(thismarker.getPosition());
+                        }  
                         
                     });
                     
@@ -185,7 +217,14 @@
             
             function markerMaker(value, id){
                 
-                var latlng = {lat: value.latitude, lng: value.longitude};
+                if(value.latitude && value.longitude){
+                    var latlng = {lat: value.latitude, lng: value.longitude};
+                }else{
+                    console.log("No latitude and longitude values associated with the place/service");
+                    return;
+                }
+                
+                
 	
                 /*
 
@@ -248,7 +287,7 @@
               
             
         </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjNIf6mCE2DrA47S_luSKHtrgYFgbUFJA&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjNIf6mCE2DrA47S_luSKHtrgYFgbUFJA&libraries=places&callback=initMap"
     async defer></script>
     
 {% endblock %}

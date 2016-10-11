@@ -1,5 +1,5 @@
 var data;
-var objectArray = [];
+var serviceMapResults = [];
 var searchArray = ["Koira-alueet", "Koira-aitaukset", "Opaskoira-aitaukset", "Koirametsät", "Koirakäymälät", "Koirauimarannat", "Koiravero", "Koiraurheilu"];
 var request = $.ajax({
     url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?service=30927+31852+30931+31855+30968+30935+33537+33538+33539',
@@ -16,13 +16,12 @@ request.done(function( result ) {
   */
     
   if( data ) {
-      
     $.each( data, function( key, value ) {
-        objectArray.push(value);
+        serviceMapResults.push(value);
         searchArray.push(value.name_fi);
     });
-    console.log("objectArray:");  
-    console.log(objectArray);  
+    console.log("serviceMapResults:");  
+    console.log(serviceMapResults);  
   }
     
 });
