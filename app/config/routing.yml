@@ -1,0 +1,11 @@
+metropolia_doggie_app:
+    resource: "@MetropoliaDoggieBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+metropolia_doggie_app:
+    resource: "@MetropoliaDoggieBundle/Controller"
+    type:     annotation
+    
+#app:
+    #resource: "@AppBundle/Controller/"
+    #type:     annotation    

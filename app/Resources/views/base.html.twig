@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            {% stylesheets 'bundles/metropoliadoggie/css/*' filter='cssrewrite' %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock %}
+        {% javascripts
+            'bundles/metropoliadoggie/minjs/jquery-3.1.1.min.js'
+            'bundles/metropoliadoggie/minjs/jquery-ui.min.js' 
+            'bundles/metropoliadoggie/js/service-map-data.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

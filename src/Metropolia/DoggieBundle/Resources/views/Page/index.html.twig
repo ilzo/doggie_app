@@ -1,0 +1,258 @@
+{# src/Metropolia/DoggieBundle/Resources/views/Page/index.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}
+{% block body %}
+
+<div class="page-wrapper">
+<div id="sidebar">
+</div>
+    <div id="page-content">    
+        <h1 class="page-title">Milou</h1>
+        <div class="wrapper">
+            <form id="search">
+                <input type="text" id="search-box" placeholder="Type something to search" />
+                <input id="search-submit" type="submit" value="Let's go" /> 
+            </form>
+            <!--<button id="dog-parks-button">Get dog parks</button>-->
+            <div id="map"></div>
+            <!--
+            <div id="place-info-container">
+            </div>
+            -->
+            </div>
+        </div>
+    <footer id="footer-front"></footer>
+</div>
+
+        <script>
+              var map;
+              var markers = [];
+              var sidebarItem; 
+              var latLngList = [];
+              var markerID = 0;
+              //var placeItem = $('<div class="place-item"></div>');
+              //var geocoder;
+             
+              function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                  center: {lat: 60.192059, lng: 24.945831},
+                  zoom: 12
+                });
+                //geocoder = new google.maps.Geocoder;
+              }
+
+            $( document ).ready(function() {
+
+                $( "#search" ).submit(function( event ) {
+                  event.preventDefault();
+                  var searchInput = $("#search-box").val();
+                  var convertedInput = searchInput.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
+                  
+                  search(convertedInput);  
+                });
+                
+                $( "#search-box" ).autocomplete({
+                  source: searchArray
+                });
+
+            });
+            
+            function search(input){
+                //console.log(input);
+                $.ajax({
+                      url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+input+'',
+                      dataType: 'json',
+                      'success': processResults  
+                });
+            }
+            
+            $("#dog-parks-button").click(function() {
+              getDogParks();
+            });
+            
+            function getDogParks(){
+                $.ajax({
+                      url: 'http://www.hel.fi/palvelukarttaws/rest/v2/service/30927',
+                      dataType: 'jsonp',
+                      'success': processResults  
+                });
+            }
+            
+            var myVar;
+            
+            function processResults(data){
+                console.log(data);
+                
+                if(markers.length > 0){
+                    markers.forEach(markerRemover);
+                    markers = [];
+                    latLngList = [];
+                    markerID = 0;
+                }
+                
+                $("#sidebar").empty();
+                
+                $.each( data, function( key, value ) {
+                    //console.log( key + "= lat: " + value.latitude + " lng: " + value.longitude );
+                    
+                    markerMaker(value, markerID);
+                    //  Create a new viewpoint bound
+                    var bounds = new google.maps.LatLngBounds ();
+                    //  Go through each...
+                    for (var i = 0, ltLgLen = latLngList.length; i < ltLgLen; i++) {
+                      //  And increase the bounds to take this point
+                      bounds.extend (latLngList[i]);
+                    }
+                    //  Fit these bounds to the map
+                    map.fitBounds (bounds);
+                    //populateSidebar(value.name_fi);
+                    $("#sidebar").append('<div id="'+markerID+'" class="sidebar-item">'+value.name_fi+'</div>');
+                    
+                    
+                    
+                    $(".sidebar-item:last-child").bind( "click", function() {
+                        
+                        showPlaceInfo(value);
+                        var placeInfoID = $(this).attr('id');
+                        $('#page-content').animate({left:0});
+                        $('#sidebar').animate({left:-380});
+                        
+                        
+                        //var thisInfoMarker = marker.get(markerID);
+                        //console.log(thisInfoMarker);
+                        var thismarker = markers[placeInfoID];
+
+                        map.setZoom(15);
+                        map.setCenter(thismarker.getPosition());
+                        
+                        
+                        
+                    });
+                    
+                    markerID++;
+                    
+                });
+                
+                
+                
+                console.log("markers:");
+                console.log(markers);
+                
+                if(data.length > 0) {
+                    $('#page-content').animate({left:380});
+                    $('#sidebar').animate({left:0});
+                }
+                
+                
+                
+                
+            }
+            
+            
+            function showPlaceInfo(value) {
+                console.log("User clicked on " + value.name_fi);
+                
+                var undefinedString = "Tietoa ei saatavilla";
+                
+                if(value.phone) {
+                    var phoneNum = value.phone;
+                }else{
+                    var phoneNum = undefinedString;
+                }
+                
+                if(value.email) {
+                    var emailAddr = value.email;
+                }else{
+                    var emailAddr = undefinedString;
+                }
+                
+                if(value.www_fi) {
+                    var webAddr = value.www_fi;
+                }else{
+                    var webAddr = undefinedString;
+                }
+                
+                //$("#place-info-container").empty();
+                $(".wrapper .place-info").remove();
+                $(".wrapper").append('<div class="place-info"><h2 class="place-name-fi">'+value.name_fi+'</h2><div class="place-phone"><span>Phone: </span>'+phoneNum+'</div><div class="place-email"><span>Email: </span>'+emailAddr+'</div><div class="place-address"><span>Street address: </span>'+value.street_address_fi+'</div><div class="place-website-fi"><span>Website: </span>'+webAddr+'</div><hr><div class="place-desc">Some description of the item</div></div>');
+            }
+            
+            function markerMaker(value, id){
+                
+                var latlng = {lat: value.latitude, lng: value.longitude};
+	
+                /*
+
+                var contentString = '<h1 id="header" class="header">'+element.title+'</h1>'+'<p id="content">'+element.summary+'</p>'
+                +'<a href="http://'+element.wikipediaUrl+'" target="_blank">'+element.wikipediaUrl+'</a>';
+
+                var infowindow = new google.maps.InfoWindow({
+                    'content': contentString
+                });
+                */
+
+                var marker = new google.maps.Marker({
+                      'position': latlng,
+                      'map': map
+                });
+                
+
+                markers.push(marker);
+                
+                latLngList.push(new google.maps.LatLng(value.latitude, value.longitude));
+                
+                //  Make an array of the LatLng's of the markers you want to show
+                /*
+                var LatLngList = new Array (new google.maps.LatLng (52.537,-2.061), new google.maps.LatLng (52.564,-2.017));
+                //  Create a new viewpoint bound
+                var bounds = new google.maps.LatLngBounds ();
+                //  Go through each...
+                for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
+                  //  And increase the bounds to take this point
+                  bounds.extend (LatLngList[i]);
+                }
+                //  Fit these bounds to the map
+                map.fitBounds (bounds);
+                */
+                
+
+                google.maps.event.addListener(marker, 'click', function() {
+                        //infowindow.open(map,marker);
+                        $('#page-content').animate({left:0});
+                        $('#sidebar').animate({left:-380});
+                        showPlaceInfo(value);
+                        map.setZoom(15);
+                        map.setCenter(marker.getPosition());
+                    
+                });	
+                
+ 
+            }
+            
+            function markerRemover(marker){
+                 marker.setMap(null);
+             }
+            
+            function populateSidebar(name) {
+                $("#sidebar").append('<div class="sidebar-item">'+name+'</div>');
+            }
+            
+            
+            
+              
+            
+        </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjNIf6mCE2DrA47S_luSKHtrgYFgbUFJA&callback=initMap"
+    async defer></script>
+    
+{% endblock %}
+
+
+
+

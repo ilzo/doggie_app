@@ -1,0 +1,24 @@
+{
+  "name": "doggieapp",
+  "version": "1.0.0",
+  "description": "DoggieApp is a mobile-friendly web browser application focusing on helping dog owners finding various dog related services, places and events within Helsinki city area, Finland. DoggieApp is an experimental school project for the Application Development Project course in Metropolia University of Applied Sciences.",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-uglify": "^1.4.0",
+    "gulp-sass": "^2.0.4"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Ilari Juvani",
+  "license": "MIT",
+  "directories": {
+    "test": "tests"
+  }
+}
