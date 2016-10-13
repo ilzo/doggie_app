@@ -18,6 +18,11 @@
             <form id="search">
                 <input type="text" id="search-box" placeholder="Type something to search" />
                 <input id="search-submit" type="submit" value="Let's go" /> 
+                <p>Or choose a category</p>
+                <input type="radio" name="seach-category" id="pet_store" value="pet_store">Pet store
+                <input type="radio" name="seach-category" id="veterinary_care" value="veterinary_care">Veterinary clinic
+                <input type="radio" name="seach-category" id="dog_park" value="dog_park"> Dog park
+                
             </form>
             <!--<button id="dog-parks-button">Get dog parks</button>-->
             <div id="map"></div>
@@ -37,6 +42,7 @@
               var latLngList = [];
               var markerID = 0;
               var serviceMapMatches = [];
+              var placesService;
               //var placeItem = $('<div class="place-item"></div>');
               //var geocoder;
              
@@ -46,7 +52,97 @@
                   zoom: 12
                 });
                 //geocoder = new google.maps.Geocoder;
+                placesService = new google.maps.places.PlacesService(map);
+
+                // The idle event is a debounced event, so we can query & listen without
+                // throwing too many requests at the server.
+                //map.addListener('idle', performRadarSearch);  
+                  
+                
+
+                //map.addListener('idle', performTextSearch);
+                  
+                  
               }
+            
+            function performRadarSearch(category) {
+              var request = {
+                location: new google.maps.LatLng(60.192059, 24.945831),
+                radius: '25000',
+                type: [category]
+              };
+              placesService.radarSearch(request, radarCallback);
+            }
+            
+            function performTextSearch() {
+                var request = {
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '25000',
+                    query: 'Musti ja Mirri'
+                };
+             
+              placesService.textSearch(request, textCallback);
+            }
+            
+
+            function radarCallback(results, status) {
+              if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                console.error(status);
+                return;
+              }
+                
+                
+                console.log(results);
+                //console.log(results[0].geometry.location);
+                
+                var detailsRequest = {
+                    placeId: results[0].place_id
+                }
+                
+                placesService.getDetails(detailsRequest, detailsCallback);
+
+                
+                
+                /*
+              for (var i = 0, result; result = results[i]; i++) {
+                
+              }
+              */
+            }
+            
+            function textCallback(results, status, pagination) {
+              if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                console.error(status);
+                return;
+              }
+                
+                
+                console.log(results);
+                //console.log(results[0].geometry.location);
+                
+                var detailsRequest = {
+                    placeId: results[0].place_id
+                }
+                
+                placesService.getDetails(detailsRequest, detailsCallback);
+
+                
+                
+              /*
+              for (var i = 0, result; result = results[i]; i++) {
+                
+              }
+              */
+            }
+            
+            function detailsCallback(place, status) {
+                  if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                    console.error(status);
+                    return;
+                  }
+                
+                console.log(place);
+            }
 
             $( document ).ready(function() {
 
@@ -55,6 +151,18 @@
                   var searchInput = $("#search-box").val();
                   var convertedInput = searchInput.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
                   console.log(convertedInput);
+                  //var checkedRadioButtons = $('input[type=radio]:checked').size();   
+                  if($("input[name='seach-category']:checked").val()) {
+                        if(document.getElementById('pet_store').checked) {
+                            performRadarSearch('pet_store');
+                        }else if(document.getElementById('veterinary_care').checked) {
+                            performRadarSearch('veterinary_care');
+                        }else if(document.getElementById('dog_park').checked){
+                            //getDogParks();
+                        }
+                      
+                     return; 
+                  }
                   
                   searchFromServiceMap(convertedInput);
                 //searchFromServiceMap(searchInput);
@@ -98,12 +206,6 @@
             }
             
             
-            function searchFromGoogleMaps(){
-                
-            }
-            
-            
-            
             $("#dog-parks-button").click(function() {
               getDogParks();
             });
@@ -112,7 +214,7 @@
                 $.ajax({
                       url: 'http://www.hel.fi/palvelukarttaws/rest/v2/service/30927',
                       dataType: 'jsonp',
-                      'success': processResults  
+                      'success': processServiceMapResults  
                 });
             }
             
