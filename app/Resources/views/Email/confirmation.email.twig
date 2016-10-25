@@ -1,0 +1,25 @@
+{% block subject %}
+    Milou account creation
+{% endblock %}
+
+{% block body_html %}
+        {% block body_text %}
+            {% autoescape false %}
+            Woof!
+
+            Hi, {{ user.username }} !
+
+            You are almost done creating your Milou account,
+            You will only need to confirm your registration by clicking the 
+            link below.
+
+            Proceed to the following URL to enable your account and login:
+
+            ======================
+            {{ confirmationUrl }}
+            ======================
+
+            - Milou team
+            {% endautoescape %}
+        {% endblock %}
+{% endblock %}

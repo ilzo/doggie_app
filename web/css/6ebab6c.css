@@ -36,6 +36,10 @@ body {
     overflow-y: scroll;
 }
 
+#places-show-more {
+    display:none;
+}
+
 #page-content .wrapper{
     margin: 0 auto 0 auto;
     max-width: 900px;

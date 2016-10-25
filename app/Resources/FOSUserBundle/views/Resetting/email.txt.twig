@@ -1,0 +1,23 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %} 
+    Resetting your password
+{% endblock %}
+
+{% block body_html %}
+        {% block body_text %}
+            {% autoescape false %}
+            Hello {{ user.username }} !
+
+            You can reset your account password by accessing the following url:
+
+            {{ confirmationUrl }}
+
+            Please note that if you did not request a password reset for your account then please delete this email 
+            and contact Milou developers.  
+
+            Best regards,
+            Milou team
+            {% endautoescape %}
+        {% endblock %}
+{% endblock %}
+

@@ -1,0 +1,14 @@
+{% block subject %}
+    User account confirmed
+{% endblock %}
+
+{% block body_html %}
+        {% block body_text %}
+            {% autoescape false %}
+            Congratulations {{ user.username }}, your Milou account has been confirmed!
+
+            Best regards,
+            Milou
+            {% endautoescape %}
+        {% endblock %}
+{% endblock %}

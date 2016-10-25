@@ -1,4 +1,4 @@
-metropoliaDoggieBundle_home:
+MetropoliaDoggieBundle_home:
     path:     /
     defaults: { _controller: MetropoliaDoggieBundle:Page:index }
     methods: [GET, POST]
