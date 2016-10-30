@@ -10,14 +10,25 @@
         {% endblock %}
         {% javascripts
             'bundles/metropoliadoggie/minjs/jquery-3.1.1.min.js'
-            'bundles/metropoliadoggie/minjs/jquery-ui.min.js' 
-            'bundles/metropoliadoggie/js/service-map-data.js' %}
+            'bundles/metropoliadoggie/minjs/jquery-ui.min.js' %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="page-wrapper">
+        <header id="page-header">
+            <div id="header-ribbon">
+                <h1 class="header-title">Milou</h1>
+            </div>
+        </header>
+        <div id="page-content">    
+            <div class="wrapper">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+        <footer id="footer"></footer>
+        </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -1,38 +1,55 @@
 html, body {
+    position:relative;
     min-height: 100%;
     margin: 0;
     padding: 0;
 }
 
 body {
-  background-color: #baffdd;
+  background-color: #d3ffe9;
 }
 
-.page-wrapper{
+#page-header {
+    position:relative;
+    width:100%;
+    height:300px;
+    background-color: #ffffff;
+}
+
+#header-ribbon {
     position: absolute;
+    width: 100%;
+    height: 60%;
+    margin: 57px 0 0 0;
+    background-color: #7bc7b5;
+}
+
+.header-title {
+    position: absolute;
+    color: #ffffff;
+    font-size: 2.8em;
+    font-family: sans-serif;
+    margin: 60px 0px 0px 60px;
 }
 
 .page-wrapper {
+    position:relative;
     width: 100%;
-    height:100%;
+    padding-bottom: 125px; /* Equals to footer height */
 }
 
 #page-content {
     position: relative;
-    text-align:center;
-    top: 0px;
-    left: 0;
-    right: 0;
-    bottom: 0px;
+    padding: 20px 0 80px 0;
 }
 
 #sidebar {
-    position: fixed;
+    position: absolute;
     height: 100%;
-    left: -380px;
+    left: 0px;
     top: 0;
-    background-color: rgb(231, 229, 229);
-    width: 380px;
+    background-color: #E7E5E5;
+    width: 45%;
     overflow-y: scroll;
 }
 
@@ -41,28 +58,26 @@ body {
 }
 
 #page-content .wrapper{
-    margin: 0 auto 0 auto;
-    max-width: 900px;
-}
-
-.page-title {
-    font-size: 2.8em;
-    font-family: sans-serif;
+    min-height: 300px;
+    padding: 40px 0 125px 0;
 }
 
 #map {
     position: relative !important;
-    margin: 0 auto 0 auto;
-    width: 900px;
-    height: 500px;
+    float: right;
+    width: 50%;
+    height: 400px;
+    margin: 0 1rem 0px 0px;
 }
 
 #map > div {
     position: relative !important; 
 }
 
-#search {
+#main-search {
     text-align:left;
+    margin-top: 3rem;
+    padding-left: 8rem;
 }
 
 #search-box {
@@ -94,15 +109,12 @@ body {
 }
 
 .sidebar-item {
-    cursor:default;
-    text-align: center;
-    height: 45px;
-    padding-top: 8%;
+    cursor: default;
     border-bottom: solid 1px #000;
     font-family: monospace;
     font-size: 11pt;
-    font-weight: bold;
     color: #1c7bdb;
+    padding: 0 0 0 1rem;
 }
 
 /*
@@ -110,6 +122,11 @@ body {
     margin-top: 40px;
 }
 */
+
+.place-name-fi{
+    padding-top: 15px;
+    -webkit-margin-before: 0 !important;
+}
 
 .place-info {
     width: 97.9%;
@@ -133,10 +150,17 @@ body {
     font-weight: bold;
 }
 
-#footer-front {
-    height: 200px;
-    margin-top: 10%;
-    background-color: darkslategrey;
+.place-desc {
+    margin: 1rem 0 0 0;
+}
+
+#footer{
+    position:absolute;
+    height: 125px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #7bc7b5;
 }
 
 /*

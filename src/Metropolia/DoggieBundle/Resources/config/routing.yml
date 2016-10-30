@@ -2,6 +2,11 @@ MetropoliaDoggieBundle_home:
     path:     /
     defaults: { _controller: MetropoliaDoggieBundle:Page:index }
     methods: [GET, POST]
+    
+MetropoliaDoggieBundle_results:
+    path:     /results
+    defaults: { _controller: RandomsoftVisionsourceBundle:Page:results }
+    methods: [GET]
         
 
     
