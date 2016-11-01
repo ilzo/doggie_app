@@ -26,7 +26,7 @@ class SearchType extends AbstractType
                         ));
         
         $builder->add('categoryChoice', ChoiceType::class, array(
-            'choices' => array('Pet store' => 'pet_store', 'Veterinary clinic' => 'veterinary_clinic', 'Dog park' => 'dog_park' ),
+            'choices' => array('Pet store' => 'pet_store', 'Veterinary clinic' => 'veterinary_care', 'Dog park' => 'dog_park' ),
             'expanded' => true,
             'multiple' => true,
             'label' => false

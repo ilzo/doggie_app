@@ -253,16 +253,59 @@ function getNextPlaces() {
                 if(detailsArray[i]) {
                     console.log("PLACE IS ALREADY IN DETAILS ARRAY");
                     populateMap(detailsArray[i]);
+                }else{
+                    
+                    console.log("undefined detailsArray value!");
+                    
                 }
 
-                console.log("undefined detailsArray value!");
-
+            
             }
 
         }
 
     }else{
         console.log("reached the end of radarArray!");
+        
+        for(var i = start; i < max; i++) {
+
+            if(radarArray[i]) {
+                
+                if (detailsArray.filter(function(e) { return e.place_id == radarArray[i].place_id; }).length == 0) {
+
+                    var detailsRequest = {
+                        placeId: radarArray[i].place_id
+                    }
+
+                    placesService.getDetails(detailsRequest, detailsCallback);
+                }else{
+
+                    if(detailsArray[i]) {
+                        console.log("PLACE IS ALREADY IN DETAILS ARRAY");
+                        populateMap(detailsArray[i]);
+                    }else{
+
+                        console.log("undefined detailsArray value!");
+
+                    }
+
+
+                }
+                
+                
+            }else{
+                console.log("radarArray:")
+                console.log(radarArray);
+                console.log("detailsArray:")
+                console.log(detailsArray);
+                break;
+            }
+
+        }
+        
+        
+        
+        /*
 
         for(var i = max - 1; i > start; i--) {
 
@@ -275,35 +318,13 @@ function getNextPlaces() {
             }
 
         }
+        */
+        
+        
 
     }
-
-
-
-
-
-    /*
-    if(detailsArray[max]) {
-
-    }
-    */
-
-
 
     console.log(detailsArray.length);
-
-
-
-    /*
-    console.log("DETAILS ARRAY: ");
-    console.log("----------------------------------------");
-
-    for(var i = 0; i < detailsArray.length; i++) { 
-        console.log(detailsArray[i]);
-    }
-    console.log("----------------------------------------");
-
-    */
 
 
 }
