@@ -3,35 +3,173 @@
 
 {% block stylesheets %}
     {{ parent() }}
+{% stylesheets filter='cssrewrite' 
+                '../web/bundles/metropoliadoggie/css/owl.carousel.css'
+                '../web/bundles/metropoliadoggie/css/owl.theme.css'
+                '../web/bundles/metropoliadoggie/css/owl.transitions.css'
+            %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
 {% endblock %}
 {% block body %}
     
-            <!--
-            <form id="search">
-                <input type="text" id="search-box" placeholder="Type something to search" />
-                <input id="search-submit" type="submit" value="Let's go" /> 
-                <p>Or choose a category</p>
-                <input type="checkbox" name="search-category" id="pet_store" value="pet_store">Pet store
-                <input type="checkbox" name="search-category" id="veterinary_care" value="veterinary_care">Veterinary clinic
-                <input type="checkbox" name="search-category" id="dog_park" value="dog_park"> Dog park
-            </form>
-            -->
-            {{ form_start(form, {'attr': {'id': 'main-search'}, 'action': path('MetropoliaDoggieBundle_home'), 'method': 'POST'}) }}
-            
-            {{ form_widget(form.search, { 'id': 'search-box',  'attr': { 'placeholder' : 'Type something to search' }}) }}
-            {{ form_row(form.categoryChoice, {'label': 'Categories:'}) }}
-                
-            <input id="search-submit" type="submit" value="Let's go" />
-            
-            
-            {{ form_end(form) }}
-            <!--<button id="dog-parks-button">Get dog parks</button>-->
-            <!--<div id="map"></div>-->
-            <!--
-            <div id="place-info-container">
+
+        <div class="slider-area">
+            <div class="slider">
+                <div id="bg-slider" class="owl-carousel owl-theme">
+                  <div class="item">
+                      {% image 'img/slider-image-2.jpg' %}
+                        <img src="{{ asset_url }}" alt="group of dogs"/>
+                      {% endimage %}
+                    </div>
+                  <div class="item">
+                      {% image 'img/slider-image-1.jpg' %}
+                        <img src="{{ asset_url }}" alt="two dogs autumn"/>
+                      {% endimage %}
+                    </div>
+                </div>
             </div>
-            -->
-           
+            <div class="container slider-content">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12">
+                        <h2>Find the right service <br> for your dog!</h2>
+                        <p>Here you can find different helpful services which make the life with your dog lovelier than it already is.</p>
+                        <div class="search-form wow pulse" data-wow-delay="0.8s">
+                            {{ form_start(form, {'attr': {'id': 'main-search', 'class': 'form-inline'}, 'action': path('MetropoliaDoggieBundle_home'), 'method': 'POST'}) }}
+                            
+                            
+                            <div class="form-group">
+                                {{ form_widget(form.search, { 'id': 'search-box',  'attr': { 'class' : 'form-control', 'placeholder' : 'What are you searching for?' }}) }}
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Where?">
+                            </div>
+                            <div class="form-group">
+                                    <select name="" id="" class="form-control">
+                                        <option>Do you have any disabilities?</option>
+                                        <option selected>I have no disabilities</option>
+                                        <option>I use a hearing aid</option>
+                                        <option>I am visually impaired</option>
+                                        <option>I have trouble distinguishing colours</option>
+										<option>I use a wheelchair</option>
+										<option>I have reduced mobility</option>
+										<option>I use a rollator</option>
+										<option>I push a stroller</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select name="" id="" class="form-control">
+                                        <option>Search within a radius of ...</option>
+                                        <option selected>Search within a radius of 1 km</option>
+                                        <option>Search within a radius of 2 km</option>
+                                        <option>Search within a radius of 5 km</option>
+										<option>Search within a radius of 10 km</option>
+										<option>Search within a radius of 20 km</option>
+                                    </select>
+                                </div>
+            
+                            {{ form_row(form.categoryChoice, {'label': 'Categories:'}) }}
+                            
+                            <br>
+
+                            <input type="submit" class="btn" value="Search" /><br>
+
+
+                            {{ form_end(form) }}
+                            
+                            <!--
+                            <form action="" class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="What are you searching for?">
+                                </div>
+								<div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Where?">
+                                </div>
+                                <div class="form-group">
+                                    <select name="" id="" class="form-control">
+                                        <option>Do you have any disabilties?</option>
+                                        <option selected>I have no kind of disabilities</option>
+                                        <option>I use a hearing aid</option>
+                                        <option>I am visually impaired</option>
+                                        <option>I have trouble distinguishing colours</option>
+										<option>I use a wheelchair</option>
+										<option>I have reduced mobility</option>
+										<option>I use a rollator</option>
+										<option>I push a stroller</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select name="" id="" class="form-control">
+                                        <option>Search within a radius of ...</option>
+                                        <option selected>Search within a radius of 1 km</option>
+                                        <option>Search within a radius of 2 km</option>
+                                        <option>Search within a radius of 5 km</option>
+										<option>Search within a radius of 10 km</option>
+										<option>Search within a radius of 20 km</option>
+                                    </select>
+                                </div>
+								<br>
+								<input type="checkbox" name="catagories" value="beaches"> <label class="check-label"> dog beaches</label>
+								<input type="checkbox" name="catagories" value="parks"> <label class="check-label"> dog parks</label>
+								<input type="checkbox" name="catagories" value="toiletts"> <label class="check-label"> dog toiletts</label>
+								<input type="checkbox" name="catagories" value="daycare"> <label class="check-label"> dog daycare</label>
+								<input type="checkbox" name="catagories" value="hotels"> <label class="check-label"> dog hotels</label><br>
+								<input type="checkbox" name="catagories" value="training schools"> <label class="check-label"> training schools</label>
+								<input type="checkbox" name="catagories" value="clinics"> <label class="check-label"> veterinary clinics</label>
+								<input type="checkbox" name="catagories" value="events"> <label class="check-label"> events</label>
+								<input type="checkbox" name="catagories" value="pet supply shops"> <label class="check-label"> pet supply shops</label><br>
+                                <input type="submit" class="btn" value="Search"><br>
+
+
+                            </form>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="container">
+                <div class="row page-title text-center wow zoomInDown" data-wow-delay="1s">
+                    <h5></h5>
+                    <h2>More services for you</h2>
+                </div>
+                <div class="row how-it-work text-center">
+                    <div class="col-md-4">
+                        <div class="single-work wow fadeInUp" data-wow-delay="0.8s">
+                              {% image 'img/how-work1.png' %}
+                                <img src="{{ asset_url }}" />
+                              {% endimage %}
+                            <h3>Dog walking service</h3>
+                            <p>Find a friendly, trustful person who walks the dog for you when you are not able to!</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="single-work  wow fadeInUp"  data-wow-delay="0.9s">
+                            {% image 'img/how-work2.png' %}
+                                <img src="{{ asset_url }}" />
+                            {% endimage %}
+                            <h3>Dog sitting service</h3>
+                            <p>Find a friendly, trustful person who sits the dog for you when you are not able to!</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="single-work wow fadeInUp"  data-wow-delay="1s">
+                            {% image 'img/how-work3.png' %}
+                                <img src="{{ asset_url }}" />
+                            {% endimage %}
+                            <h3>Emergency</h3>
+                            <p>Immediately medical help: Find the nearest and open veterinary clinic!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
 {% endblock %}
 
 

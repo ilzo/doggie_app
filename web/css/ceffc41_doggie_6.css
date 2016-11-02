@@ -3,10 +3,12 @@ html, body {
     min-height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
-
-/*
+body {
+  background-color: #d3ffe9;
+}
 
 #page-header {
     position:relative;
@@ -23,7 +25,6 @@ html, body {
     background-color: #7bc7b5;
 }
 
-
 .header-title {
     position: absolute;
     color: #ffffff;
@@ -35,7 +36,7 @@ html, body {
 .page-wrapper {
     position:relative;
     width: 100%;
-    padding-bottom: 125px; 
+    padding-bottom: 125px; /* Equals to footer height */
 }
 
 #page-content {
@@ -43,11 +44,12 @@ html, body {
     padding: 20px 0 80px 0;
 }
 
-*/
-
 #sidebar {
     position: absolute;
-    height: 800px;
+    height: 100%;
+    left: 0px;
+    top: 0;
+    background-color: #E7E5E5;
     width: 45%;
     overflow-y: scroll;
 }
@@ -61,41 +63,30 @@ html, body {
     padding: 40px 0 125px 0;
 }
 
-
-#search_categoryChoice label {
-    font-size: 12px;
-    font-weight: 700;
-    margin: 0px 1.5rem 0 0.5rem;
-    color: #6E6E6E;
-}
-
-.results-wrapper {
+#map {
+    position: relative !important;
     float: right;
     width: 50%;
-    padding: 0 5rem 0 0;
-}
-
-#results-form-container {
-    padding: 3rem 0 3rem 0;
-    background-color: white;
-    width: 100%;
-    border-bottom: 4px solid #088A82;
-    
-}
-
-#map {
-    
-    width: 100%;
-    height: 500px;
-    margin: 6rem 1rem 0px 0px;
+    height: 400px;
+    margin: 0 1rem 0px 0px;
 }
 
 #map > div {
     position: relative !important; 
 }
 
+#main-search {
+    text-align:left;
+    margin-top: 3rem;
+    padding-left: 8rem;
+}
 
-
+#search-box {
+    height: 50px;
+    width: 50%;
+    margin: 0px 45px 1.5em 0;
+    padding: 0 0px 0px 15px;
+}
 
 #search-submit {
 	background-color:#4ba2fa;
@@ -120,14 +111,11 @@ html, body {
 
 .sidebar-item {
     cursor: default;
+    border-bottom: solid 1px #000;
+    font-family: monospace;
     font-size: 11pt;
-    background-color: #f6f6f6;
-    color: #4b4b4b;
+    color: #1c7bdb;
     padding: 0 0 0 1rem;
-    margin: 0 0 13px 0;
-    height: 345px;
-    font-family: 'Raleway', sans-serif;
-    font-size: large;
 }
 
 /*
@@ -137,8 +125,6 @@ html, body {
 */
 
 .place-name-fi{
-    color: #088A82;
-    font-weight: 800;
     padding-top: 15px;
     -webkit-margin-before: 0 !important;
 }
@@ -181,7 +167,7 @@ html, body {
 
 
 /******************************************/
-/********* BOOTSTRAP TEMPLATE CSS  ********/
+/********** BOOTSTRAP THEME CSS  **********/
 /******************************************/
 
 
@@ -661,7 +647,7 @@ background-color: #088A82;
 
 
 .job-add{
-	background: url(img/job-add.png);
+	background: url(../../web/bundles/metropoliadoggie/css/img/job-add.png);
 	height: 500px;
 }
 .job-add h2 {
@@ -803,749 +789,10 @@ background-color: #088A82;
     position:absolute;
     left:50%; /* centers the loading animation horizontally one the screen */
     top:50%; /* centers the loading animation vertically one the screen */
-    background-image:url(img/preloader.gif); /* path to your loading animation */
+    background-image:url(../../web/bundles/metropoliadoggie/css/img/preloader.gif); /* path to your loading animation */
     background-repeat:no-repeat;
     background-position:center;
     margin:-100px 0 0 -100px; /* is width and height divided by two */
 }
-
-
-/******************************************/
-/************* RESPONSIVENESS  ************/
-/******************************************/
-
-@media (min-width:1200px){
-    .container-custom{
-        width:100%;
-        min-height: 800px;
-    }
-}
-
-
-@media (max-width: 480px){
-
-.header-call p span {
-  margin-right: 10px;
-  font-size: 12px;
-}
-.header-call p span i {
-  font-size: 14px;
-}
-.header-social ul{
-	padding-top: 0px;
-}
-.header-social ul li a {
-  font-size: 12px;
-}
-.navbar .container {
-  padding: 10px 15px;
-}
-.navbar {
-  min-height: 75px;
-}
-.navbar-collapse {
-  margin-top: 15px;
-}
-.navbar-brand img {
-  width: 110px;
-}
-.navbar-default .navbar-nav > li > a {
-  font-size: 13px;
-}
-.nav-button {
-  font-size: 13px;
-  padding: 6px 13px;
-}
-.navbar-nav > li > a {
-  padding-left: 15px;
-  padding-right: 6px;
-}
-.main-nav {
-  padding-top: 4px;
-}
-.navbar-default .navbar-nav > li > a.active::after {
-  bottom: -2px;
-  height: 2px;
-  width: 100%;
-}
-.navbar-default .navbar-nav > li > a::after {
-  bottom: -2px;
-  height: 2px;
-}
-.slider-area .container{
-	padding: 0 50px
-}
-
-
-.slider-content {
-  margin-left: -53%;
-}
-.slider-content h2 {
-  font-size: 21px;
-  margin-bottom: 15px;
-}
-.slider-content p {
-  font-size: 12px;
-  margin-bottom: 18px;
-}
-.search-form {
-  padding: 20px 30px;
-}
-.form-inline .form-control, .form-inline .form-control {
-  height: 30px;
-  width: 100%;
-}
-.form-inline input[type="submit"] {
-  height: 30px;
-  width: 100%
-}
-.slider-content {
-  top: 5%;
-}
-.slider-area{
-	height:440px;
-}
-#bg-slider .item img {
-  height: 440px;
-}
-.slider .owl-pagination {
-  bottom: 165px;
-  right: 0;
-  width: 30px;
-}
-.page-title{
-	padding-top: 50px;
-}
-.page-title h2 {
-  font-size: 20px;
-  margin-top: 2px;
-}
-
-.page-title h5 {
-  font-size: 12px;
-}
-.page-title p {
-  font-size: 12px;
-  line-height: 20px;
-  margin-top: 10px;
-  padding: 0 5%
-}
-.single-work {
-  padding: 20px 0 40px;
-}
-.single-work img {
-  width: 60px;
-}
-.single-work h3 {
-  font-size: 18px;
-}
-.single-work p {
-  font-size: 12px;
-  line-height: 20px;
-  margin-top: 15px;
-}
-.job-posting{
-	padding: 20px 0px 0px 30px
-}
-.nav > li > a {
-  padding: 8px 10px;
-}
-.nav-tabs > li > a {
-  font-size: 12px;
-}
-.tab-content ul li {
-  height: 235px;
-  margin-bottom: 20px;
-  width: 219px;
-}
-.tab-content ul li a img {
-  height: 100%;
-  width: 100%;
-}
-.overlay {
-  height: 235px;
-  top: -104px;
-}
-.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-
-  padding: 5px;
-}
-.tbl-title > h4 {
-  font-size: 16px;
-}
-.table tr td h4 span {
-  font-size: 12px;
-}
-.table tr td p {
-  font-size: 12px;
-}
-.table tr td a {
-  font-size: 12px;
-  padding: 9px 9px;
-}
-.tbl-logo > img {
-  width: 60px;
-}
-.job-add {
-  background-size: cover;
-  height: 300px;
-  margin-top: 50px;
-  width: 220px;
-}
-.job-add h2 {
-  font-size: 25px;
-  padding: 180px 20px 0;
-}
-.job-add a {
-  font-size: 13px;
-  margin: 14px 0 0 10px;
-  padding: 9px 44px;
-}
-.more-jobs {
-  margin-top: 5px;
-}
-.more-jobs a {
-  font-size: 12px;
-  padding: 12px 15px;
-}
-.client-text {
-  margin-left: 0;
-  width: 740px;
-}
-.client-face > img {
-  border: 2px solid #fff;
-  width: 60px;
-}
-.testimonial .item .client-face {
-  right: 0;
-  top: 83px;
-}
-.footer-copy{
-	padding: 0 20px;
-}
-.single-footer {
-  margin-top: 35px;
-}
-.single-footer img {
-  width: 150px;
-}
-.single-footer p {
-  font-size: 13px;
-}
-.single-footer h4 {
-  margin-bottom: 25px;
-}
-.footer-copy span {
-  margin-left: 10px;
-  margin-right: 10px;
-  font-size: 12px;
-}
-.single-footer ul li {
-  margin-bottom: 5px;
-}
-.single-footer ul li a {
-  font-size: 13px;
-}
-.client-text p {
-  line-height: 20px;
-  font-size: 13px;
-}
-.client-text h4 {
-  font-size: 13px;
-}
-.client-text h4 i {
-  font-size: 11px;
-}
-
-
-}
-
-
-@media (min-width: 480px) and (max-width: 767px){
-
-.header-call p span {
-  margin-right: 10px;
-  font-size: 12px;
-}
-.header-call p span i {
-  font-size: 14px;
-}
-.header-social ul{
-	padding-top: 0px;
-}
-.header-social ul li a {
-  font-size: 12px;
-}
-.navbar .container {
-  padding: 10px 15px;
-}
-.navbar {
-  min-height: 75px;
-}
-.navbar-collapse {
-  margin-top: 15px;
-}
-.navbar-brand img {
-  width: 110px;
-}
-.navbar-default .navbar-nav > li > a {
-  font-size: 13px;
-}
-.nav-button {
-  font-size: 13px;
-  padding: 6px 13px;
-}
-.navbar-nav > li > a {
-  padding-left: 15px;
-  padding-right: 6px;
-}
-.main-nav {
-  padding-top: 4px;
-}
-.navbar-default .navbar-nav > li > a.active::after {
-  bottom: -2px;
-  height: 2px;
-  width: 100%;
-}
-.navbar-default .navbar-nav > li > a::after {
-  bottom: -2px;
-  height: 2px;
-}
-.slider-area .container{
-	padding: 0 50px
-}
-
-
-.slider-content {
-  margin-left: -53%;
-}
-.slider-content h2 {
-  font-size: 24px;
-  margin-bottom: 15px;
-}
-.slider-content p {
-  font-size: 12px;
-  margin-bottom: 50px;
-}
-.search-form {
-  padding: 20px 30px;
-}
-.form-inline .form-control, .form-inline .form-control {
-  height: 35px;
-  width: 100%;
-}
-.form-inline input[type="submit"] {
-  height: 35px;
-  width: 100%
-}
-.slider-content {
-  top: 5%;
-}
-.slider-area{
-	height:440px;
-}
-#bg-slider .item img {
-  height: 440px;
-}
-.slider .owl-pagination {
-  bottom: 165px;
-  right: 0;
-  width: 30px;
-}
-.page-title{
-	padding-top: 50px;
-}
-.page-title h2 {
-  font-size: 20px;
-  margin-top: 2px;
-}
-.page-title h5 {
-  font-size: 12px;
-}
-.page-title p {
-  line-height: 20px;
-  margin-top: 10px;
-  font-size: 12px;
-}
-.single-work {
-  padding: 20px 0 40px;
-}
-.single-work img {
-  width: 60px;
-}
-.single-work h3 {
-  font-size: 18px;
-}
-.single-work p {
-  font-size: 12px;
-  line-height: 20px;
-  margin-top: 15px;
-}
-.job-posting{
-	padding: 0px 0px 0px 30px
-}
-.nav > li > a {
-  padding: 8px 10px;
-}
-.nav-tabs > li > a {
-  font-size: 12px;
-}
-.tab-content ul li {
-  height: 235px;
-  margin-bottom: 20px;
-  width: 219px;
-}
-.tab-content ul li a img {
-  height: 100%;
-  width: 100%;
-}
-.overlay {
-  height: 235px;
-  top: -104px;
-}
-.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-
-  padding: 5px;
-}
-.tbl-title > h4 {
-  font-size: 16px;
-}
-.table tr td h4 span {
-  font-size: 12px;
-}
-.table tr td p {
-  font-size: 12px;
-}
-.table tr td a {
-  font-size: 12px;
-  padding: 9px 9px;
-}
-.tbl-logo > img {
-  width: 60px;
-}
-.job-add {
-  background-size: cover;
-  height: 300px;
-  margin-top: 50px;
-  width: 225px;
-}
-.job-add h2 {
-  font-size: 25px;
-  padding: 180px 20px 0;
-}
-.job-add a {
-  font-size: 13px;
-  margin: 14px 0 0 10px;
-  padding: 9px 44px;
-}
-.more-jobs {
-  margin-top: 5px;
-}
-.more-jobs a {
-  font-size: 12px;
-  padding: 12px 15px;
-}
-.client-text {
-  margin-left: 0;
-  width: 740px;
-}
-.testimonial .item .client-face {
-  right: -4px;
-  top: 71px;
-}
-.single-footer img {
-  width: 150px;
-}
-.single-footer p {
-  font-size: 13px;
-}
-.single-footer h4 {
-  margin-bottom: 25px;
-}
-.footer-copy span {
-  margin-left: 10px;
-  margin-right: 10px;
-  font-size: 12px;
-}
-.single-footer ul li {
-  margin-bottom: 5px;
-}
-.single-footer ul li a {
-  font-size: 13px;
-}
-
-
-}
-
-@media (min-width: 768px) and (max-width: 979px){
-
-.header-call p span {
-  margin-right: 10px;
-  font-size: 12px;
-}
-.header-call p span i {
-  font-size: 14px;
-}
-.header-social ul{
-	padding-top: 0px;
-}
-.header-social ul li a {
-  font-size: 12px;
-}
-.navbar {
-  min-height: 85px;
-}
-.navbar-brand img {
-  width: 110px;
-}
-.navbar-default .navbar-nav > li > a {
-  font-size: 13px;
-}
-.nav-button {
-  font-size: 13px;
-  padding: 6px 13px;
-}
-.navbar-nav > li > a {
-  padding-left: 6px;
-  padding-right: 6px;
-}
-.main-nav {
-  padding-top: 4px;
-}
-.navbar-default .navbar-nav > li > a.active::after {
-  bottom: -15px;
-  height: 4px;
-  width: 100%;
-}
-.navbar-default .navbar-nav > li > a::after{
-	bottom: -15px;
-  height: 4px;
-}
-.slider-area .container{
-	padding: 0 50px
-}
-
-
-.slider-content {
-  margin-left: -375px;
-}
-.slider-content h2 {
-  font-size: 30px;
-  margin-bottom: 15px;
-}
-.slider-content p {
-  font-size: 12px;
-  margin-bottom: 50px;
-}
-.search-form {
-  padding: 15px 0;
-}
-.form-inline .form-control, .form-inline .form-control {
-  height: 35px;
-  width: 160px;
-}
-.form-inline input[type="submit"] {
-  height: 35px;
-  width: 80px;
-}
-
-.slider-area{
-	height:440px;
-}
-#bg-slider .item img {
-  height: 440px;
-}
-.slider .owl-pagination {
-  bottom: 165px;
-  right: 0;
-  width: 30px;
-}
-.page-title{
-	padding-top: 50px;
-}
-.page-title h2 {
-  font-size: 20px;
-  margin-top: 2px;
-}
-.page-title h5 {
-  font-size: 12px;
-}
-.page-title p {
-  line-height: 20px;
-  margin-top: 10px;
-  font-size: 12px;
-}
-.tab-content ul li {
-  height: 235px;
-  margin-bottom: 20px;
-  width: 219px;
-}
-.tab-content ul li a img {
-  height: 100%;
-  width: 100%;
-}
-.overlay {
-  height: 235px;
-  top: -104px;
-}
-.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-
-  padding: 5px;
-}
-.tbl-title > h4 {
-  font-size: 16px;
-}
-.table tr td h4 span {
-  font-size: 12px;
-}
-.table tr td p {
-  font-size: 12px;
-}
-.table tr td a {
-  font-size: 12px;
-  padding: 9px 9px;
-}
-.tbl-logo > img {
-  width: 60px;
-}
-.job-add {
-  height: 400px;
-  background-size: cover;
-}
-.job-add h2 {
-  font-size: 30px;
-  padding: 240px 20px 0;
-}
-.job-add a {
-  font-size: 13px;
-  margin: 20px 0 0 10px;
-  padding: 20px 42px;
-}
-.more-jobs {
-  margin-top: 5px;
-}
-.more-jobs a {
-  font-size: 12px;
-  padding: 12px 15px;
-}
-.client-text {
-  margin-left: 0;
-  width: 740px;
-}
-.testimonial .item .client-face {
-  right: -4px;
-  top: 71px;
-}
-.single-footer img {
-  width: 150px;
-}
-.single-footer p {
-  font-size: 13px;
-}
-.single-footer h4 {
-  margin-bottom: 25px;
-}
-.footer-copy span {
-  margin-left: 10px;
-  margin-right: 10px;
-  font-size: 12px;
-}
-.single-footer ul li {
-  margin-bottom: 5px;
-}
-.single-footer ul li a {
-  font-size: 13px;
-}
-
-}
-
-@media (min-width: 969px) and (max-width: 1169px){
-
-.navbar-nav > li > a {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-.header-social .list-inline > li{
-	padding-right: 0px
-}
-.slider-content {
-  margin-left: -485px;
-}
-.slider-area{
-	height: 540px;
-}
-#bg-slider .item img {
-  height: 540px;
-}
-.tab-content ul li {
-  height: 160px;
-  width: 145px;
-}
-.tab-content ul li a img{
-	width: 100%;
-	height: 100%;
-}
-.overlay > h3 {
-  font-size: 15px;
-  left: 10px;
-}
-.tab-content ul.job-seeker li a .overlay p {
-  bottom: 10px;
-  font-size: 12px;
-}
-.tab-content ul.job-seeker li a:hover .overlay p{
-	left: 10px;
-}
-.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-
-  padding: 5px;
-}
-.tbl-logo > img {
-  width: 60px;
-}
-.tbl-title > h4 {
-  font-size: 16px;
-}
-.table tr td h4 span {
-  font-size: 12px;
-}
-.table tr td p {
-  font-size: 12px;
-}
-.table tr td a {
-  font-size: 12px;
-  padding: 9px 9px;
-}
-.job-add {
-  height: 400px;
-  background-size: cover;
-}
-.job-add h2 {
-  font-size: 30px;
-  padding: 240px 20px 0;
-}
-.job-add a {
-  font-size: 13px;
-  margin: 20px 0 0 10px;
-  padding: 20px 42px;
-}
-.more-jobs {
-  margin-top: 5px;
-}
-.more-jobs a {
-  font-size: 12px;
-  padding: 12px 15px;
-}
-.client-text {
-  margin-left: 80px;
-  width: 740px;
-}
-.testimonial .item .client-face {
-  right: 85px;
-  top: 68px;
-}
-
-}
-
 
 

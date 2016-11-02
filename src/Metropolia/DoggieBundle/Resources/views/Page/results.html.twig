@@ -2,11 +2,7 @@
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
-{% block javascripts %}
-{{ parent() }}
-<script src="{{ asset('bundles/metropoliadoggie/js/service-map-data.js') }}"></script>
-<script src="{{ asset('bundles/metropoliadoggie/js/linked-events-data.js') }}"></script>
-{% endblock %}
+
 {% block body %}
 <div id="search-data-container">
     {% if input %}
@@ -18,19 +14,81 @@
         {% endfor %}
     {% endif %}
 </div>
-<div id="sidebar">
-    <div id="sidebar-content-wrapper">
-    </div>
-    <div class="sidebar-footer">
-        <button id="places-show-more">Show more</button>
-    </div>
-</div>
-<div id="map"></div>
-  
-    
+
+ <div class="content-area">
+      <div id="results-form-container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12">
+                <div class="search-form wow pulse" data-wow-delay="0.8s">
+                    <form action="" class=" form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="What are you searching for?">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Where?">
+                        </div>
+                        <div class="form-group">
+                            <select name="" id="" class="form-control">
+                                <option>Do you have any disabilities?</option>
+                                <option selected>I have no disabilities</option>
+                                <option>I use a hearing aid</option>
+                                <option>I am visually impaired</option>
+                                <option>I have trouble distinguishing colours</option>
+                                <option>I use a wheelchair</option>
+                                <option>I have reduced mobility</option>
+                                <option>I use a rollator</option>
+                                <option>I push a stroller</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select name="" id="" class="form-control">
+                                <option>Search within a radius of ...</option>
+                                <option selected>Search within a radius of 1 km</option>
+                                <option>Search within a radius of 2 km</option>
+                                <option>Search within a radius of 5 km</option>
+                                <option>Search within a radius of 10 km</option>
+                                <option>Search within a radius of 20 km</option>
+                            </select>
+                        </div>
+                        <input type="submit" class="btn" value="Search">
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+            <div class="container-custom">
+                <div id="sidebar">
+                    <div id="sidebar-content-wrapper">
+                    </div>
+                    <div class="sidebar-footer">
+                        <button id="places-show-more">Show more</button>
+                    </div>
+                </div>
+                <div class="results-wrapper">
+                     <div class="row page-title text-center wow zoomInDown animated" data-wow-delay="1s" style="visibility: visible; animation-delay: 1s; animation-name: zoomInDown;">
+                        <h5></h5>
+                        <h2>This is what we found!</h2>
+                    </div>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjNIf6mCE2DrA47S_luSKHtrgYFgbUFJA&libraries=places&callback=initMap"
     async defer></script>  
-<script src="{{ asset('bundles/metropoliadoggie/js/doggie.js') }}"></script>  
+{{ parent() }}
+    {% javascripts
+        'bundles/metropoliadoggie/js/doggie.js' %}
+            <script src="{{ asset_url }}"></script>
+            <script src="{{ asset('bundles/metropoliadoggie/js/service-map-data.js') }}"></script>
+            <script src="{{ asset('bundles/metropoliadoggie/js/linked-events-data.js') }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 
