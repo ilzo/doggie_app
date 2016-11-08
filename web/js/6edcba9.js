@@ -1,42 +1,12 @@
-var map;
 var markers = [];
 var sidebarItem; 
 var latLngList = [];
 var markerID = 0;
 var serviceMapMatches = [];
-var placesService;
 var radarArray = [];
 var detailsArray = [];
 var searchedCategories = [];
-var checkboxes = [];
-/*
-var petstoresSearched = false;
-var vetsSearched = false;
-*/
-
-
-//var placeItem = $('<div class="place-item"></div>');
-//var geocoder;
-
-function initMap() {
-map = new google.maps.Map(document.getElementById('map'), {
-  center: {lat: 60.192059, lng: 24.945831},
-  zoom: 12
-});
-//geocoder = new google.maps.Geocoder;
-placesService = new google.maps.places.PlacesService(map);
-
-// The idle event is a debounced event, so we can query & listen without
-// throwing too many requests at the server.
-//map.addListener('idle', performRadarSearch);  
-
-
-
-//map.addListener('idle', performTextSearch);
-
-
-}
-
+var serviceCategories = [];
 
 $( document ).ready(function() {
 
@@ -51,13 +21,13 @@ $( "#search-box" ).autocomplete({
     }
     
     $("#search-data-container").find('.categories-data').each(function(){
-        checkboxes.push($(this).data("id"));
+        serviceCategories.push($(this).data("id"));
     });
     
-  if(checkboxes.length > 0) {
-      console.log(checkboxes);
+  if(serviceCategories.length > 0) {
+      console.log(serviceCategories);
       var time = 200;
-      $.each( checkboxes, function( i, val ) {
+      $.each( serviceCategories, function( i, val ) {
 
             setTimeout( function(){ 
 
@@ -68,11 +38,12 @@ $( "#search-box" ).autocomplete({
                     performRadarSearch('veterinary_care');
                     
                 }else if(val === 'dog_park'){
-
-                   
                     searchFromServiceMap('Koira-alueet');
+                    
+                }else if(val === 'dog_trainer'){
+                    performKeywordSearch('dog_trainer');
+                    
                 }
-
 
             }, time);
 
@@ -99,8 +70,11 @@ function performRadarSearch(category) {
 if($.inArray(category, searchedCategories) == -1) {
 
     console.log("category " + category + " was not found in searchedCategories");
+    
+    console.log("iaaaaaaaaa");
 
     var request = {
+        key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
         location: new google.maps.LatLng(60.192059, 24.945831),
         radius: '25000',
         type: [category]
@@ -112,13 +86,39 @@ if($.inArray(category, searchedCategories) == -1) {
 }else{
 
     console.log("category " + category + " has already been searched");
-
     processRadarArray();   
 
 }  
 
 
 }
+
+
+function performKeywordSearch(category) {
+   
+    if($.inArray(category, searchedCategories) == -1) {
+
+        console.log("category " + category + " was not found in searchedCategories");
+        console.log("pyija pyija");
+
+        var request = {
+            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+            keyword: 'Koirankouluttaja',
+            location: new google.maps.LatLng(60.192059, 24.945831),
+            radius: '25000',
+        };
+        
+        placesService.radarSearch(request, processRadarResults);
+        searchedCategories.push(category);
+        
+    }else{
+        
+        console.log("category " + category + " has already been searched");
+        processRadarArray();   
+    }  
+    
+}
+
 
 function performTextSearch() {
 var request = {

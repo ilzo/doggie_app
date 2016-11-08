@@ -80,15 +80,32 @@
 
 {% endblock %}
 {% block javascripts %}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjNIf6mCE2DrA47S_luSKHtrgYFgbUFJA&libraries=places&callback=initMap"
-    async defer></script>  
+<script>
+var map;
+var placesService;
+    
+function initMap() {
+map = new google.maps.Map(document.getElementById('map'), {
+  center: {lat: 60.192059, lng: 24.945831},
+  zoom: 12
+});
+//geocoder = new google.maps.Geocoder;
+placesService = new google.maps.places.PlacesService(map);
+
+// The idle event is a debounced event, so we can query & listen without
+// throwing too many requests at the server.
+//map.addListener('idle', performRadarSearch);  
+//map.addListener('idle', performTextSearch);
+
+}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjNIf6mCE2DrA47S_luSKHtrgYFgbUFJA&libraries=places&callback=initMap" async defer></script>
 {{ parent() }}
-    {% javascripts
-        'bundles/metropoliadoggie/js/doggie.js' %}
-            <script src="{{ asset_url }}"></script>
-            <script src="{{ asset('bundles/metropoliadoggie/js/service-map-data.js') }}"></script>
-            <script src="{{ asset('bundles/metropoliadoggie/js/linked-events-data.js') }}"></script>
-    {% endjavascripts %}
+<script src="{{ asset('bundles/metropoliadoggie/js/doggie.js') }}"></script>
+<script src="{{ asset('bundles/metropoliadoggie/js/service-map-data.js') }}"></script>
+<script src="{{ asset('bundles/metropoliadoggie/js/linked-events-data.js') }}"></script>
+   
 {% endblock %}
 
 
