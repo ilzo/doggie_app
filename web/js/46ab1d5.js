@@ -733,3 +733,106 @@ function markerRemover(marker){
 function populateSidebar(name) {
     $("#sidebar-content-wrapper").append('<div class="sidebar-item">'+name+'</div>');
 }
+var serviceMapData;
+var serviceMapResults = [];
+var searchArray = ["Koira-alueet", "Koira-aitaukset", "Opaskoira-aitaukset", "Koirametsät", "Koirakäymälät", "Koirauimarannat", "Koiravero", "Koiraurheilu"];
+
+var serviceMapRequest = $.ajax({
+    url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?service=30927+31852+30931+31855+30968+30935+33537+33538+33539',
+    dataType: 'jsonp' 
+});
+
+serviceMapRequest.done(function( result ) {
+  serviceMapData = result;  
+  if( serviceMapData ) {
+    $.each( serviceMapData, function( key, value ) {
+        serviceMapResults.push(value);
+        searchArray.push(value.name_fi);
+    });
+    console.log("serviceMapResults:");  
+    console.log(serviceMapResults);  
+  }
+    
+});
+
+serviceMapRequest.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+
+var linkedEventsData1;
+var linkedEventsData2;
+var linkedEventsResults1 = [];
+var linkedEventsResults2 = [];
+
+var linkedEventsRequest1 = $.ajax({
+    url: 'https://api.hel.fi/linkedevents/v1/event/?include=location&keyword=helmet%3A10689&text=koira&text=koirat&page_size=50',
+    //url: '/linkedevents/v1/event/?include=location&keyword=helmet%3A10689&page=2&text=koira&text=koirat',
+    dataType: 'json' 
+});
+
+var linkedEventsRequest2 = $.ajax({
+    url: 'https://api.hel.fi/linkedevents/v1/search/?q=koira&q=koirat&type=event&page_size=50',
+    dataType: 'json' 
+});
+
+
+
+$.when(linkedEventsRequest1, linkedEventsRequest2).done(function(data1, data2) {
+  linkedEventsData1 = data1;
+  linkedEventsData2 = data2;
+    
+  if( linkedEventsData1 ) {
+    $.each( linkedEventsData1, function( key, value ) {
+        linkedEventsResults1.push(value);
+    });
+    console.log("linkedEventsResults1:");  
+    console.log(linkedEventsResults1);  
+  }
+    
+    
+  if( linkedEventsData2 ) {
+    $.each( linkedEventsData2, function( key, value ) {
+        linkedEventsResults2.push(value);
+    });
+    console.log("linkedEventsResults2:");  
+    console.log(linkedEventsResults2);  
+  }
+    
+    
+});
+
+linkedEventsRequest1.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+linkedEventsRequest2.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+
+/*
+linkedEventsRequest.done(function(result) {
+  linkedEventsData = result;
+    
+  if( linkedEventsData ) {
+    $.each( linkedEventsData, function( key, value ) {
+        linkedEventsResults.push(value);
+    });
+    console.log("linkedEventsResults:");  
+    console.log(linkedEventsResults);  
+  }
+    
+});
+
+
+
+
+var promise1 = $.ajax("/myServerScript1");
+var promise2 = $.ajax("/myServerScript2");
+ 
+$.when(promise1, promise2).done(function(data1, data2) {
+  // Handle data from both Ajax calls
+});
+
+*/

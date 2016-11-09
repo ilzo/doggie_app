@@ -79,6 +79,10 @@
 
 
 {% endblock %}
+
+
+
+
 {% block javascripts %}
 <script>
 var map;
@@ -102,9 +106,14 @@ placesService = new google.maps.places.PlacesService(map);
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjNIf6mCE2DrA47S_luSKHtrgYFgbUFJA&libraries=places&callback=initMap" async defer></script>
 {{ parent() }}
-<script src="{{ asset('bundles/metropoliadoggie/js/doggie.js') }}"></script>
-<script src="{{ asset('bundles/metropoliadoggie/js/service-map-data.js') }}"></script>
-<script src="{{ asset('bundles/metropoliadoggie/js/linked-events-data.js') }}"></script>
+
+{% javascripts
+    '@MetropoliaDoggieBundle/Resources/public/js/doggie.js'
+    '@MetropoliaDoggieBundle/Resources/public/js/service-map-data.js' 
+    '@MetropoliaDoggieBundle/Resources/public/js/linked-events-data.js' %}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
    
 {% endblock %}
 

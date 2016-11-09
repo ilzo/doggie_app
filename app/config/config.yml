@@ -83,8 +83,8 @@ fos_user:
         
 # Assetic Configuration
 assetic:
-    debug:          "%kernel.debug%"
-    use_controller: false
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
     bundles:        [MetropoliaDoggieBundle]    
     filters:
         cssrewrite: ~

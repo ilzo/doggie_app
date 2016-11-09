@@ -4445,7 +4445,7 @@ html, body {
 #sidebar {
     position: absolute;
     height: 800px;
-    width: 45%;
+    width: 38%;
     overflow-y: scroll;
 }
 
@@ -4468,7 +4468,7 @@ html, body {
 
 .results-wrapper {
     float: right;
-    width: 50%;
+    width: 58%;
     padding: 0 5rem 0 0;
 }
 
@@ -4524,7 +4524,12 @@ html, body {
     margin: 0 0 13px 0;
     height: 345px;
     font-family: 'Raleway', sans-serif;
-    font-size: large;
+    font-size: 14px;
+    border-bottom: 2px solid #088A82;
+    border-top: 2px solid #088A82;
+    border-left: 2px solid #088A82;
+    border-right: 2px solid #088A82;
+    border-radius: 16px;
 }
 
 /*

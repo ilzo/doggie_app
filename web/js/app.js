@@ -10,149 +10,109 @@ var serviceCategories = [];
 
 $( document ).ready(function() {
     
+console.log('morooooooooooooooooo');
     
 $( "#search-box" ).autocomplete({
   source: searchArray
 });
     
-    var searchInput = $("#input-data").data("id");
-   
+  var searchInput = $("#input-data").data("id");
+    if(searchInput) {
+        var convertedInput = searchInput.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
+    }
+    
     $("#search-data-container").find('.categories-data').each(function(){
         serviceCategories.push($(this).data("id"));
     });
     
-    if(serviceCategories.length > 0) {
+  if(serviceCategories.length > 0) {
       
-        console.log(serviceCategories);
-        var time = 200;
-        $.each( serviceCategories, function( i, val ) {
+      console.log(serviceCategories);
+      var time = 200;
+      $.each( serviceCategories, function( i, val ) {
 
-        setTimeout( function(){ 
+            setTimeout( function(){ 
 
                 if(val === 'pet_store') {
-                    performRadarSearchByCategory('pet_store', searchInput);
+                    performRadarSearch('pet_store');
 
                 }else if(val === 'veterinary_care') {
-                    performRadarSearchByCategory('veterinary_care', searchInput);
-
+                    performRadarSearch('veterinary_care');
+                    
                 }else if(val === 'dog_park'){
-                    searchFromServiceMap(searchInput);
-
+                    searchFromServiceMap('Koira-alueet');
+                    
                 }else if(val === 'dog_trainer'){
-                    performRadarSearchByTerms(searchInput, 'Koirankouluttaja');
+                    performKeywordSearch('dog_trainer');
+                    
                 }
 
             }, time);
 
-            time += 1000;
+          time += 1000;
 
 
         });
-      
-    }else{
-        
-        if(searchInput){
-            searchFromServiceMap(searchInput);
-            performRadarSearchByTerms(searchInput);
-        }else{
-            console.log("Error: No search terms given!");
-        }
+
+     
+  }else{
+      if(convertedInput){
+          searchFromServiceMap(convertedInput); 
+      }else{
+          console.log("Error: No search terms given!");
+      }
           
-    }
+  }
   
 
 });
 
-function performRadarSearchByCategory(category, terms) {
+function performRadarSearch(category) {
 
+if($.inArray(category, searchedCategories) == -1) {
+
+    console.log("category " + category + " was not found in searchedCategories");
+    
+    var request = {
+        key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+        location: new google.maps.LatLng(60.192059, 24.945831),
+        radius: '25000',
+        type: [category]
+    };
+    placesService.radarSearch(request, processRadarResults);
+
+    searchedCategories.push(category);
+
+}else{
+
+    console.log("category " + category + " has already been searched");
+    processRadarArray();   
+
+}  
+
+
+}
+
+function performKeywordSearch(category) {
+   
     if($.inArray(category, searchedCategories) == -1) {
 
         console.log("category " + category + " was not found in searchedCategories");
 
-        if(category && terms){
-            var request = {
-                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-                keyword: terms,
-                location: new google.maps.LatLng(60.192059, 24.945831),
-                radius: '25000',
-                type: [category]
-            };
-        }else if (category && !terms) {
-            var request = {
-                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-                location: new google.maps.LatLng(60.192059, 24.945831),
-                radius: '25000',
-                type: [category]
-            };
-
-        }else{
-            console.log("Error: function performRadarSearchByCategory must have have a defined category!");
-            return;
-
-        }
-
+        var request = {
+            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+            keyword: 'Koirankouluttaja',
+            location: new google.maps.LatLng(60.192059, 24.945831),
+            radius: '25000',
+        };
+        
         placesService.radarSearch(request, processRadarResults);
         searchedCategories.push(category);
         
     }else{
-
+        
         console.log("category " + category + " has already been searched");
         processRadarArray();   
-
-    }  
-
-}
-
-function performRadarSearchByTerms(terms, extraArg) {
-    
-    if(terms && !extraArg) {
-        var request = {
-            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-            keyword: terms,
-            location: new google.maps.LatLng(60.192059, 24.945831),
-            radius: '25000',
-        };
-        
-    }else if(terms && extraArg){
-        var request = {
-            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-            keyword: extraArg + ' ' + terms,
-            location: new google.maps.LatLng(60.192059, 24.945831),
-            radius: '25000',
-        };
-        
-    }else if (!terms && extraArg){
-         var request = {
-            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-            keyword: extraArg,
-            location: new google.maps.LatLng(60.192059, 24.945831),
-            radius: '25000',
-        };
-    }
-   
-    placesService.radarSearch(request, processRadarResults);
-        
-}
-
-
-function searchFromServiceMap(input){
-    
-    if (input) {
-        var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
-    
-        $.ajax({
-              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'',
-              dataType: 'jsonp',
-              'success': processServiceMapResults  
-        });
-        
-    }else{
-        $.ajax({
-              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet',
-              dataType: 'jsonp',
-              'success': processServiceMapResults  
-        });
-        
     }  
     
 }
@@ -173,9 +133,6 @@ function processRadarResults(results, status) {
     console.error(status);
     return;
     }
-    
-    
-    
 
     $("#sidebar-content-wrapper").empty();
     console.log(results);
@@ -191,34 +148,22 @@ function processRadarResults(results, status) {
     for (var i = 0, result; result = results[i]; i++) {
       radarArray.push(result);
     }
-    
-    
+
     for(var i = 0; i < 8; i++) {
-        
-        if(radarArray[i]){
 
         if (detailsArray.filter(function(e) { return e.place_id == radarArray[i].place_id; }).length == 0) {
-            
-            
-                var detailsRequest = {
-                    placeId: radarArray[i].place_id
-                }
-            
-                placesService.getDetails(detailsRequest, detailsCallback);
-                
-        
+
+            var detailsRequest = {
+                placeId: radarArray[i].place_id
+            }
+
+            placesService.getDetails(detailsRequest, detailsCallback);
         }else{
-            
             console.log("PLACE IS ALREADY IN DETAILS ARRAY");
             populateMap(detailsArray[i]);
         }
-            
-        }else{
-            console.log("radarArray has less than 8 objects");
-            break;
-        } 
 
-    }
+        }
 
 
     if(results.length > 0) {
@@ -234,12 +179,12 @@ function processRadarResults(results, status) {
 
     console.log("radarArray:"); 
     console.log(radarArray);
-    
+
 }
 
 
 function processRadarArray() {
-    //$("#sidebar-content-wrapper").empty();
+    $("#sidebar-content-wrapper").empty();
 
 
     if(markers.length > 0){
@@ -284,127 +229,65 @@ function getNextPlaces() {
     var mapItemId = $(".sidebar-item:last-child").attr('id');
     var numStr = mapItemId.substring(9);
     var start = (parseInt(numStr)) + 1;
-    var end = start + 5;
+    var max = start + 5;
 
-    if (radarArray[end]) {
+    if (radarArray[max]) {
 
         console.log("testing radarArray: ");
         console.log(radarArray[start]);
 
-        for(var i = start; i < end; i++) {
-            
-            //Check if object in radarArray is from Google Maps or Service Map API
-                if(radarArray[i].place_id){
+        for(var i = start; i < max; i++) {
+
+            if (detailsArray.filter(function(e) { return e.place_id == radarArray[i].place_id; }).length == 0) {
+
+                var detailsRequest = {
+                    placeId: radarArray[i].place_id
+                }
+
+                placesService.getDetails(detailsRequest, detailsCallback);
+            }else{
+
+                if(detailsArray[i]) {
+                    console.log("PLACE IS ALREADY IN DETAILS ARRAY");
+                    populateMap(detailsArray[i]);
+                }else{
                     
+                    console.log("undefined detailsArray value!");
                     
-                    if (detailsArray.filter(function(e) { return e.place_id == radarArray[i].place_id; }).length == 0) {
-
-                        var detailsRequest = {
-                            placeId: radarArray[i].place_id
-                        }
-
-                        placesService.getDetails(detailsRequest, detailsCallback);
-                    }else{
-
-                        if(detailsArray[i]) {
-                            console.log("PLACE IS ALREADY IN DETAILS ARRAY");
-                            populateMap(detailsArray[i]);
-                        }else{
-
-                            console.log("undefined detailsArray value!");
-
-                        }
-
-
-                    }
-                    
-                    
-                }else if (radarArray[i].id){
-                    
-                    
-                    if (detailsArray.filter(function(e) { return e.id == radarArray[i].id; }).length == 0) {
-
-                        populateMap(radarArray[i]);
-                    }else{
-
-                        if(detailsArray[i]) {
-                            console.log("PLACE IS ALREADY IN DETAILS ARRAY");
-                            populateMap(detailsArray[i]);
-                        }else{
-
-                            console.log("undefined detailsArray value!");
-
-                        }
-
-
-                    }
-                    
-                    
-                        
-                        
                 }
 
             
+            }
 
         }
 
     }else{
         console.log("reached the end of radarArray!");
         
-        for(var i = start; i < end; i++) {
+        for(var i = start; i < max; i++) {
 
             if(radarArray[i]) {
                 
-                
-                //Check if object in radarArray is from Google Maps or Service Map API
-                if(radarArray[i].place_id){
-                    
-                    
-                    if (detailsArray.filter(function(e) { return e.place_id == radarArray[i].place_id; }).length == 0) {
+                if (detailsArray.filter(function(e) { return e.place_id == radarArray[i].place_id; }).length == 0) {
 
-                        var detailsRequest = {
-                            placeId: radarArray[i].place_id
-                        }
+                    var detailsRequest = {
+                        placeId: radarArray[i].place_id
+                    }
 
-                        placesService.getDetails(detailsRequest, detailsCallback);
+                    placesService.getDetails(detailsRequest, detailsCallback);
+                }else{
+
+                    if(detailsArray[i]) {
+                        console.log("PLACE IS ALREADY IN DETAILS ARRAY");
+                        populateMap(detailsArray[i]);
                     }else{
 
-                        if(detailsArray[i]) {
-                            console.log("PLACE IS ALREADY IN DETAILS ARRAY");
-                            populateMap(detailsArray[i]);
-                        }else{
-
-                            console.log("undefined detailsArray value!");
-
-                        }
-
+                        console.log("undefined detailsArray value!");
 
                     }
-                    
-                    
-                }else if (radarArray[i].id){
-                    
-                    if (detailsArray.filter(function(e) { return e.id == radarArray[i].id; }).length == 0) {
-
-                        populateMap(radarArray[i]);
-                    }else{
-
-                        if(detailsArray[i]) {
-                            console.log("PLACE IS ALREADY IN DETAILS ARRAY");
-                            populateMap(detailsArray[i]);
-                        }else{
-
-                            console.log("undefined detailsArray value!");
-
-                        }
 
 
-                    }
-                    
                 }
-                
-                
-                
                 
                 
             }else{
@@ -421,11 +304,11 @@ function getNextPlaces() {
         
         /*
 
-        for(var i = end - 1; i > start; i--) {
+        for(var i = max - 1; i > start; i--) {
 
             if(radarArray[i]) {
                 console.log("the last index of radarArray: " + i);
-                end = i;
+                max = i;
                 console.log(radarArray);
                 console.log(detailsArray);
                 break;
@@ -556,6 +439,15 @@ function populateMap(place) {
 }
 
 
+function searchFromServiceMap(input){
+    $.ajax({
+          url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+input+'',
+          dataType: 'jsonp',
+          'success': processServiceMapResults  
+    });
+}
+
+
 $("#dog-parks-button").click(function() {
     getDogParks();
 });
@@ -569,60 +461,74 @@ function getDogParks(){
 }
 
 
+function processGoogleResults(data){ 
+if(markers.length > 0){
+    markers.forEach(markerRemover);
+    markers = [];
+    latLngList = [];
+    markerID = 0;
+}
 
-function processServiceMapResults(results){
-    
+}
 
-    console.log(results);
+
+function processServiceMapResults(data){
+    console.log(data);
 
     if(markers.length > 0){
         markers.forEach(markerRemover);
         markers = [];
         latLngList = [];
         markerID = 0;
-        //radarArray = [];
     }
-    
+
     $("#sidebar-content-wrapper").empty();
 
-    for (var i = 0, result; result = results[i]; i++) {
-      radarArray.push(result);
-    }
+    $.each( data, function( key, value ) {
+        //console.log( key + "= lat: " + value.latitude + " lng: " + value.longitude );
 
-    for(var i = 0; i < 8; i++) {
+        markerMaker(value, markerID);
+        //  Create a new viewpoint bound
+        var bounds = new google.maps.LatLngBounds ();
+        //  Go through each...
+        for (var i = 0, ltLgLen = latLngList.length; i < ltLgLen; i++) {
+          //  And increase the bounds to take this point
+          bounds.extend (latLngList[i]);
+        }
+        //  Fit these bounds to the map
+        map.fitBounds (bounds);
+        //populateSidebar(value.name_fi);
         
         
-        if(radarArray[i]){
-
-            if (detailsArray.filter(function(e) { return e.id == radarArray[i].id; }).length == 0) {
-                populateMap(radarArray[i])
-            }else{
-                console.log("PLACE IS ALREADY IN DETAILS ARRAY");
-                populateMap(detailsArray[i]);
-            }
-            
-        }else{
-            console.log("radarArray has less than 8 objects");
-            break;
-        } 
-        
-    }
+        //$("#sidebar-content-wrapper").append('<div id="map-item-'+markerID+'" class="sidebar-item">'+value.name_fi+'</div>');
+        appendPlaceDetails(value, markerID);
 
 
-    if(results.length > 0) {
-        $('#places-show-more').unbind( "click" );
-        $('#places-show-more').unbind( "dblclick" );
-        $('#places-show-more').css('display', 'block').bind( "click", getNextPlaces).dblclick(function(e){
-          console.log("double-clicked but did nothing");
-          e.stopPropagation();
-          e.preventDefault();
-          return false;
+
+        $(".sidebar-item:last-child").bind( "click", function() {
+
+            //showPlaceDetails(value);
+            var mapItemId = $(this).attr('id');
+
+            var thisPlaceId = mapItemId.substring(9);
+
+            //var thisInfoMarker = marker.get(markerID);
+            //console.log(thisInfoMarker);
+            var thismarker = markers[thisPlaceId];
+
+            if(thismarker){
+                map.setZoom(15);
+                map.setCenter(thismarker.getPosition());
+            }  
+
         });
-    }
 
-    console.log("radarArray:"); 
-    console.log(radarArray);
+        markerID++;
 
+    });
+
+    console.log("markers:");
+    console.log(markers);
 
 }
 
@@ -733,3 +639,106 @@ function markerRemover(marker){
 function populateSidebar(name) {
     $("#sidebar-content-wrapper").append('<div class="sidebar-item">'+name+'</div>');
 }
+var serviceMapData;
+var serviceMapResults = [];
+var searchArray = ["Koira-alueet", "Koira-aitaukset", "Opaskoira-aitaukset", "Koirametsät", "Koirakäymälät", "Koirauimarannat", "Koiravero", "Koiraurheilu"];
+
+var serviceMapRequest = $.ajax({
+    url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?service=30927+31852+30931+31855+30968+30935+33537+33538+33539',
+    dataType: 'jsonp' 
+});
+
+serviceMapRequest.done(function( result ) {
+  serviceMapData = result;  
+  if( serviceMapData ) {
+    $.each( serviceMapData, function( key, value ) {
+        serviceMapResults.push(value);
+        searchArray.push(value.name_fi);
+    });
+    console.log("serviceMapResults:");  
+    console.log(serviceMapResults);  
+  }
+    
+});
+
+serviceMapRequest.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+
+var linkedEventsData1;
+var linkedEventsData2;
+var linkedEventsResults1 = [];
+var linkedEventsResults2 = [];
+
+var linkedEventsRequest1 = $.ajax({
+    url: 'https://api.hel.fi/linkedevents/v1/event/?include=location&keyword=helmet%3A10689&text=koira&text=koirat&page_size=50',
+    //url: '/linkedevents/v1/event/?include=location&keyword=helmet%3A10689&page=2&text=koira&text=koirat',
+    dataType: 'json' 
+});
+
+var linkedEventsRequest2 = $.ajax({
+    url: 'https://api.hel.fi/linkedevents/v1/search/?q=koira&q=koirat&type=event&page_size=50',
+    dataType: 'json' 
+});
+
+
+
+$.when(linkedEventsRequest1, linkedEventsRequest2).done(function(data1, data2) {
+  linkedEventsData1 = data1;
+  linkedEventsData2 = data2;
+    
+  if( linkedEventsData1 ) {
+    $.each( linkedEventsData1, function( key, value ) {
+        linkedEventsResults1.push(value);
+    });
+    console.log("linkedEventsResults1:");  
+    console.log(linkedEventsResults1);  
+  }
+    
+    
+  if( linkedEventsData2 ) {
+    $.each( linkedEventsData2, function( key, value ) {
+        linkedEventsResults2.push(value);
+    });
+    console.log("linkedEventsResults2:");  
+    console.log(linkedEventsResults2);  
+  }
+    
+    
+});
+
+linkedEventsRequest1.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+linkedEventsRequest2.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+
+/*
+linkedEventsRequest.done(function(result) {
+  linkedEventsData = result;
+    
+  if( linkedEventsData ) {
+    $.each( linkedEventsData, function( key, value ) {
+        linkedEventsResults.push(value);
+    });
+    console.log("linkedEventsResults:");  
+    console.log(linkedEventsResults);  
+  }
+    
+});
+
+
+
+
+var promise1 = $.ajax("/myServerScript1");
+var promise2 = $.ajax("/myServerScript2");
+ 
+$.when(promise1, promise2).done(function(data1, data2) {
+  // Handle data from both Ajax calls
+});
+
+*/
