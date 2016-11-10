@@ -30,6 +30,7 @@ class PageController extends Controller
                 
                 $response = $this->forward('MetropoliaDoggieBundle:Page:results', array(
                     'input' => $searchData->getSearch(),
+                    'location' => $searchData->getLocation(),
                     'categories' => $searchData->getCategoryChoice()
                 ));
                 
@@ -63,13 +64,14 @@ class PageController extends Controller
 }
     
     
-public function resultsAction($input, $categories){
+public function resultsAction($input, $location, $categories){
     
-    dump($input);
-    dump($categories);
+    //dump($input);
+    //dump($categories);
     
     return $this->render('MetropoliaDoggieBundle:Page:results.html.twig', array(
         'input' => $input,
+        'location' => $location,
         'categories' => $categories
     ));  
 }

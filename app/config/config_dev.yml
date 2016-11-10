@@ -32,6 +32,14 @@ monolog:
 
 twig:
     cache: false
+    
+    
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    bundles:        [MetropoliaDoggieBundle]    
+    filters:
+        cssrewrite: ~
 
 #swiftmailer:
 #    delivery_address: me@example.com

@@ -55,7 +55,7 @@
 
 /* mouse grab icon */
 .grabbing { 
-    cursor:url(../../web/bundles/metropoliadoggie/css/grabbing.png) 8 8, move;
+    cursor:url(../../../web/bundles/metropoliadoggie/css/grabbing.png) 8 8, move;
 }
 
 /* fix */

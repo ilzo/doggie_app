@@ -7,6 +7,8 @@ class Search
 {
     protected $search;
     
+    protected $location;
+    
     protected $categoryChoice;
     
     public function getSearch()
@@ -17,6 +19,16 @@ class Search
     public function setSearch($search)
     {
         $this->search = $search;
+    }
+    
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function setLocation($location)
+    {
+        $this->location = $location;
     }
     
     public function getCategoryChoice()

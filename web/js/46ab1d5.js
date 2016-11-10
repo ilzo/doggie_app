@@ -10,12 +10,15 @@ var serviceCategories = [];
 
 $( document ).ready(function() {
     
-    
+/*
 $( "#search-box" ).autocomplete({
   source: searchArray
 });
+*/
     
     var searchInput = $("#input-data").data("id");
+    
+    var locationInput = $("#location-data").data("id");
    
     $("#search-data-container").find('.categories-data').each(function(){
         serviceCategories.push($(this).data("id"));
@@ -30,16 +33,16 @@ $( "#search-box" ).autocomplete({
         setTimeout( function(){ 
 
                 if(val === 'pet_store') {
-                    performRadarSearchByCategory('pet_store', searchInput);
+                    performRadarSearchByCategory('pet_store', searchInput, locationInput);
 
                 }else if(val === 'veterinary_care') {
-                    performRadarSearchByCategory('veterinary_care', searchInput);
+                    performRadarSearchByCategory('veterinary_care', searchInput, locationInput);
 
                 }else if(val === 'dog_park'){
-                    searchFromServiceMap(searchInput);
+                    searchFromServiceMap(searchInput, locationInput);
 
                 }else if(val === 'dog_trainer'){
-                    performRadarSearchByTerms(searchInput, 'Koirankouluttaja');
+                    performRadarSearchByTerms(searchInput, 'Koirankouluttaja', locationInput);
                 }
 
             }, time);
@@ -52,8 +55,8 @@ $( "#search-box" ).autocomplete({
     }else{
         
         if(searchInput){
-            searchFromServiceMap(searchInput);
-            performRadarSearchByTerms(searchInput);
+            searchFromServiceMap(searchInput, locationInput);
+            performRadarSearchByTerms(searchInput, null, locationInput);
         }else{
             console.log("Error: No search terms given!");
         }
@@ -63,35 +66,88 @@ $( "#search-box" ).autocomplete({
 
 });
 
-function performRadarSearchByCategory(category, terms) {
+function performRadarSearchByCategory(category, terms, location) {
 
     if($.inArray(category, searchedCategories) == -1) {
 
         console.log("category " + category + " was not found in searchedCategories");
+        
+        //If user has specified a location for search, the address has to be geocoded into LatLng-object
+        //and placed as a location property into arraySearch request
+        if(location) {
+            
+            geocoder.geocode( { 'address': location}, function(results, status) {
+              if (status == 'OK') {
+                //var geocodeResult = results[0].geometry.location;
+                //console.log("geocodeResult:");
+                
+                var testLat = parseFloat(results[0].geometry.location.lat()).toFixed(5);
+                var testLng = parseFloat(results[0].geometry.location.lng()).toFixed(5);
+                 
+                if(category && terms){
+                
+                    var request = {
+                        key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                        keyword: terms,
+                        location: results[0].geometry.location,
+                        radius: '10000',
+                        type: [category]
+                    };
+                }else if (category && !terms) {
+                    
+                    var request = {
+                        key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                        location: results[0].geometry.location,
+                        radius: '10000',
+                        type: [category]
+                    };
 
-        if(category && terms){
-            var request = {
-                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-                keyword: terms,
-                location: new google.maps.LatLng(60.192059, 24.945831),
-                radius: '25000',
-                type: [category]
-            };
-        }else if (category && !terms) {
-            var request = {
-                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-                location: new google.maps.LatLng(60.192059, 24.945831),
-                radius: '25000',
-                type: [category]
-            };
+                }else{
+                    console.log("Error: function performRadarSearchByCategory must have have a defined category!");
+                    return;
 
+                }
+                  
+                placesService.radarSearch(request, processRadarResults);
+                
+              } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+              }
+              
+            });
+            
+            
+            
+            
+            
         }else{
-            console.log("Error: function performRadarSearchByCategory must have have a defined category!");
-            return;
+            
+            if(category && terms){
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: terms,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '25000',
+                    type: [category]
+                };
+            }else if (category && !terms) {
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '25000',
+                    type: [category]
+                };
 
+            }else{
+                console.log("Error: function performRadarSearchByCategory must have have a defined category!");
+                return;
+
+            }
+            
+             placesService.radarSearch(request, processRadarResults);
+              
         }
 
-        placesService.radarSearch(request, processRadarResults);
         searchedCategories.push(category);
         
     }else{
@@ -103,58 +159,151 @@ function performRadarSearchByCategory(category, terms) {
 
 }
 
-function performRadarSearchByTerms(terms, extraArg) {
+function performRadarSearchByTerms(terms, extraArg, location) {
     
-    if(terms && !extraArg) {
-        var request = {
-            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-            keyword: terms,
-            location: new google.maps.LatLng(60.192059, 24.945831),
-            radius: '25000',
-        };
+    if(location) {
         
-    }else if(terms && extraArg){
-        var request = {
-            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-            keyword: extraArg + ' ' + terms,
-            location: new google.maps.LatLng(60.192059, 24.945831),
-            radius: '25000',
-        };
+        geocoder.geocode( { 'address': location}, function(results, status) {
+              if (status == 'OK') {
+                  
+                  if(terms && !extraArg) {
+                        var request = {
+                            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                            keyword: terms,
+                            location: results[0].geometry.location,
+                            radius: '1500',
+                        };
+
+                    }else if(terms && extraArg){
+                        var request = {
+                            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                            keyword: extraArg + ' ' + terms,
+                            location: results[0].geometry.location,
+                            radius: '1500',
+                        };
+
+                    }else if (!terms && extraArg){
+                         var request = {
+                            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                            keyword: extraArg,
+                            location: results[0].geometry.location,
+                            radius: '1500',
+                        };
+                    }
+
+                placesService.radarSearch(request, processRadarResults);
+                
+                  
+              } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+              }
+              
+            });
         
-    }else if (!terms && extraArg){
-         var request = {
-            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-            keyword: extraArg,
-            location: new google.maps.LatLng(60.192059, 24.945831),
-            radius: '25000',
-        };
+    }else{
+        
+        console.log("tippi tappi");
+        
+        if(terms && !extraArg) {
+            var request = {
+                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                keyword: terms,
+                location: new google.maps.LatLng(60.192059, 24.945831),
+                radius: '25000',
+            };
+
+        }else if(terms && extraArg){
+            var request = {
+                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                keyword: extraArg + ' ' + terms,
+                location: new google.maps.LatLng(60.192059, 24.945831),
+                radius: '25000',
+            };
+
+        }else if (!terms && extraArg){
+             var request = {
+                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                keyword: extraArg,
+                location: new google.maps.LatLng(60.192059, 24.945831),
+                radius: '25000',
+            };
+        }
+
+        placesService.radarSearch(request, processRadarResults);
+        
+        
     }
-   
-    placesService.radarSearch(request, processRadarResults);
+    
+    
         
 }
 
 
-function searchFromServiceMap(input){
+function searchFromServiceMap(input, location){
     
-    if (input) {
-        var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
-    
-        $.ajax({
-              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'',
-              dataType: 'jsonp',
-              'success': processServiceMapResults  
-        });
+    if(location) {
+        
+        geocoder.geocode( { 'address': location}, function(results, status) {
+                  if (status == 'OK') {
+                    //var geocodeResult = results[0].geometry.location;
+                    //console.log("geocodeResult:");
+
+                    var serviceMapLat = parseFloat(results[0].geometry.location.lat()).toFixed(5);
+                    var serviceMapLng = parseFloat(results[0].geometry.location.lng()).toFixed(5);
+                      
+                      
+                    if (input) {
+                        var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
+
+                        $.ajax({
+                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance=500',
+                              dataType: 'jsonp',
+                              'success': processServiceMapResults  
+                        });
+
+                    }else{
+                        $.ajax({
+                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance=500',
+                              dataType: 'jsonp',
+                              'success': processServiceMapResults  
+                        });
+
+                    }
+
+
+
+                  } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                  }
+              
+            });
         
     }else{
-        $.ajax({
-              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet',
-              dataType: 'jsonp',
-              'success': processServiceMapResults  
-        });
         
-    }  
+        if (input) {
+            var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
+
+            $.ajax({
+                  url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'',
+                  dataType: 'jsonp',
+                  'success': processServiceMapResults  
+            });
+
+        }else{
+            $.ajax({
+                  url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet',
+                  dataType: 'jsonp',
+                  'success': processServiceMapResults  
+            });
+
+        }  
+        
+        
+        
+        
+    }
     
+               
 }
 
 function performTextSearch() {

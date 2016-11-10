@@ -25,6 +25,15 @@ class SearchType extends AbstractType
                         'label' => false)
                         ));
         
+        
+        $builder->add(
+        $builder->create('location', TextType::class, array(
+                        'required' => false,
+                        'trim' => true,
+                        'empty_data'  => null,
+                        'label' => false)
+                        ));
+        
         $builder->add('categoryChoice', ChoiceType::class, array(
             'choices' => array('Pet store' => 'pet_store', 'Veterinary clinic' => 'veterinary_care', 'Dog park' => 'dog_park', 'Dog trainer' => 'dog_trainer'),
             'expanded' => true,

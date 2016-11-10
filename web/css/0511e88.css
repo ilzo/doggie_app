@@ -55,7 +55,7 @@
 
 /* mouse grab icon */
 .grabbing { 
-    cursor:url(../../web/bundles/metropoliadoggie/css/grabbing.png) 8 8, move;
+    cursor:url(../../../web/bundles/metropoliadoggie/css/grabbing.png) 8 8, move;
 }
 
 /* fix */
@@ -147,7 +147,7 @@
 /* preloading images */
 .owl-item.loading{
 	min-height: 150px;
-	background: url(../../web/bundles/metropoliadoggie/css/AjaxLoader.gif) no-repeat center center
+	background: url(../../../web/bundles/metropoliadoggie/css/AjaxLoader.gif) no-repeat center center
 }
 /* 
  *  Owl Carousel CSS3 Transitions 
