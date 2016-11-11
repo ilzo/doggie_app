@@ -6,10 +6,12 @@
         {% block stylesheets %}
         
            <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
+			{% stylesheets '../web/bundles/metropoliadoggie/css/font-awesome.min.css' %}
+			<link rel="stylesheet" href="{{ asset_url }}" />
+			{% endstylesheets %}
         
             {% stylesheets filter='cssrewrite' 
                 '../web/bundles/metropoliadoggie/css/normalize.css'
-                '../web/bundles/metropoliadoggie/css/font-awesome.min.css'
                 '../web/bundles/metropoliadoggie/css/fontello.css'
                 '../web/bundles/metropoliadoggie/css/animate.css'
                 '../web/bundles/metropoliadoggie/css/bootstrap.min.css'
