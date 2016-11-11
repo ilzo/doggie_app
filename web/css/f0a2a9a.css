@@ -4442,6 +4442,10 @@ html, body {
 
 */
 
+
+
+
+
 #sidebar {
     position: absolute;
     height: 800px;
@@ -4451,6 +4455,7 @@ html, body {
 
 #places-show-more {
     display:none;
+    margin: auto;
 }
 
 #page-content .wrapper{
@@ -4481,10 +4486,9 @@ html, body {
 }
 
 #map {
-    
-    width: 100%;
+    width: 800px;
     height: 500px;
-    margin: 6rem 1rem 0px 0px;
+    margin: 2.5em auto 0 auto;
 }
 
 #map > div {
@@ -4579,6 +4583,23 @@ html, body {
     left: 0;
     background-color: #7bc7b5;
 }
+
+#sidebar-footer {
+    text-align: center;
+}
+
+.no-more-results-msg {
+    color: #088A82;
+    font-family: 'Raleway', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin: auto;
+}
+
+.what-we-found {
+    margin: auto;
+}
+
 
 
 
@@ -5215,6 +5236,16 @@ background-color: #088A82;
 /******************************************/
 /************* RESPONSIVENESS  ************/
 /******************************************/
+
+
+@media screen and (max-width: 1400px) {
+    #map {
+        width: 640px;
+        height: 425px;
+        margin: 2.5em auto 0 auto;
+    }
+}
+
 
 @media (min-width:1200px){
     .container-custom{

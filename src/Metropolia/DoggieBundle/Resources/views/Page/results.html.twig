@@ -11,6 +11,9 @@
     {% if location %}
         <div id="location-data" data-id="{{ location }}"></div>
     {% endif %}
+    {% if radius %}
+        <div id="radius-data" data-id="{{ radius }}"></div>
+    {% endif %}
     {% if categories %}
         {% for category in categories %}
                  <div class="categories-data" data-id="{{ category }}"></div>   
@@ -65,12 +68,12 @@
                 <div id="sidebar">
                     <div id="sidebar-content-wrapper">
                     </div>
-                    <div class="sidebar-footer">
-                        <button id="places-show-more">Show more</button>
+                    <div id="sidebar-footer">
+                        <button id="places-show-more" class="btn">Show more</button>
                     </div>
                 </div>
                 <div class="results-wrapper">
-                     <div class="row page-title text-center wow zoomInDown animated" data-wow-delay="1s" style="visibility: visible; animation-delay: 1s; animation-name: zoomInDown;">
+                     <div class="what-we-found row page-title text-center wow zoomInDown animated" data-wow-delay="1s" style="visibility: visible; animation-delay: 1s; animation-name: zoomInDown;">
                         <h5></h5>
                         <h2>This is what we found!</h2>
                     </div>
@@ -114,8 +117,7 @@ placesService = new google.maps.places.PlacesService(map);
 
 {% javascripts
     '@MetropoliaDoggieBundle/Resources/public/js/doggie.js'
-    '@MetropoliaDoggieBundle/Resources/public/js/service-map-data.js' 
-    '@MetropoliaDoggieBundle/Resources/public/js/linked-events-data.js' %}
+    '@MetropoliaDoggieBundle/Resources/public/js/service-map-data.js' %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

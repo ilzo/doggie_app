@@ -58,14 +58,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select name="" id="" class="form-control">
-                                        <option>Search within a radius of ...</option>
-                                        <option selected>Search within a radius of 1 km</option>
-                                        <option>Search within a radius of 2 km</option>
-                                        <option>Search within a radius of 5 km</option>
-										<option>Search within a radius of 10 km</option>
-										<option>Search within a radius of 20 km</option>
-                                    </select>
+                                    {{ form_widget(form.radius, { 'id': 'radius-select',  'attr': { 'class' : 'form-control' }}) }}
                                 </div>
             
                             {{ form_row(form.categoryChoice, {'label': 'Categories:'}) }}

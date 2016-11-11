@@ -34,6 +34,20 @@ class SearchType extends AbstractType
                         'label' => false)
                         ));
         
+        $builder->add('radius', ChoiceType::class, array(
+            'choices'  => array(
+                'Search within a radius of ...' => null,
+                'Search within a radius of 1 km' => '1000',
+                'Search within a radius of 2 km' => '2000',
+                'Search within a radius of 5 km' => '5000',
+                'Search within a radius of 10 km' => '10000',
+                'Search within a radius of 20 km' => '20000'
+            ),
+            'expanded' => false,
+            'multiple' => false,
+            'label' => false
+        ));
+        
         $builder->add('categoryChoice', ChoiceType::class, array(
             'choices' => array('Pet store' => 'pet_store', 'Veterinary clinic' => 'veterinary_care', 'Dog park' => 'dog_park', 'Dog trainer' => 'dog_trainer'),
             'expanded' => true,

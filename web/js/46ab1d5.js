@@ -19,7 +19,9 @@ $( "#search-box" ).autocomplete({
     var searchInput = $("#input-data").data("id");
     
     var locationInput = $("#location-data").data("id");
-   
+    
+    var radiusInput = $("#radius-data").data("id");
+    
     $("#search-data-container").find('.categories-data').each(function(){
         serviceCategories.push($(this).data("id"));
     });
@@ -33,16 +35,16 @@ $( "#search-box" ).autocomplete({
         setTimeout( function(){ 
 
                 if(val === 'pet_store') {
-                    performRadarSearchByCategory('pet_store', searchInput, locationInput);
+                    performRadarSearchByCategory('pet_store', searchInput, locationInput, radiusInput);
 
                 }else if(val === 'veterinary_care') {
-                    performRadarSearchByCategory('veterinary_care', searchInput, locationInput);
+                    performRadarSearchByCategory('veterinary_care', searchInput, locationInput, radiusInput);
 
                 }else if(val === 'dog_park'){
-                    searchFromServiceMap(searchInput, locationInput);
+                    searchFromServiceMap(searchInput, locationInput, radiusInput);
 
                 }else if(val === 'dog_trainer'){
-                    performRadarSearchByTerms(searchInput, 'Koirankouluttaja', locationInput);
+                    performRadarSearchByTerms(searchInput, 'Koirankouluttaja', locationInput, radiusInput);
                 }
 
             }, time);
@@ -55,8 +57,8 @@ $( "#search-box" ).autocomplete({
     }else{
         
         if(searchInput){
-            searchFromServiceMap(searchInput, locationInput);
-            performRadarSearchByTerms(searchInput, null, locationInput);
+            searchFromServiceMap(searchInput, locationInput, radiusInput);
+            performRadarSearchByTerms(searchInput, null, locationInput, radiusInput);
         }else{
             console.log("Error: No search terms given!");
         }
@@ -66,7 +68,7 @@ $( "#search-box" ).autocomplete({
 
 });
 
-function performRadarSearchByCategory(category, terms, location) {
+function performRadarSearchByCategory(category, terms, location, radius) {
 
     if($.inArray(category, searchedCategories) == -1) {
 
@@ -84,27 +86,42 @@ function performRadarSearchByCategory(category, terms, location) {
                 var testLat = parseFloat(results[0].geometry.location.lat()).toFixed(5);
                 var testLng = parseFloat(results[0].geometry.location.lng()).toFixed(5);
                  
-                if(category && terms){
+                if(category && terms && radius){
                 
                     var request = {
                         key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
                         keyword: terms,
                         location: results[0].geometry.location,
-                        radius: '10000',
+                        radius: radius,
                         type: [category]
                     };
-                }else if (category && !terms) {
+                }else if (category && !terms && radius) {
                     
                     var request = {
                         key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
                         location: results[0].geometry.location,
-                        radius: '10000',
+                        radius: radius,
                         type: [category]
                     };
+                    
+                    
+                }else if (category && terms && !radius){
+                    var request = {
+                        key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                        keyword: terms,
+                        location: results[0].geometry.location,
+                        radius: '20000',
+                        type: [category]
+                    };
+                    
 
-                }else{
-                    console.log("Error: function performRadarSearchByCategory must have have a defined category!");
-                    return;
+                }else if (category && !terms && !radius){
+                    var request = {
+                        key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                        location: results[0].geometry.location,
+                        radius: '20000',
+                        type: [category]
+                    };
 
                 }
                   
@@ -122,25 +139,38 @@ function performRadarSearchByCategory(category, terms, location) {
             
         }else{
             
-            if(category && terms){
+            if(category && terms && radius){
                 var request = {
                     key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
                     keyword: terms,
                     location: new google.maps.LatLng(60.192059, 24.945831),
-                    radius: '25000',
+                    radius: radius,
                     type: [category]
                 };
-            }else if (category && !terms) {
+            }else if (category && !terms && radius) {
                 var request = {
                     key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
                     location: new google.maps.LatLng(60.192059, 24.945831),
-                    radius: '25000',
+                    radius: radius,
+                    type: [category]
+                };
+                
+            }else if (category && terms && !radius){
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: terms,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '20000',
                     type: [category]
                 };
 
-            }else{
-                console.log("Error: function performRadarSearchByCategory must have have a defined category!");
-                return;
+            }else if (category && !terms && !radius){
+                 var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '20000',
+                    type: [category]
+                };
 
             }
             
@@ -159,22 +189,32 @@ function performRadarSearchByCategory(category, terms, location) {
 
 }
 
-function performRadarSearchByTerms(terms, extraArg, location) {
+function performRadarSearchByTerms(terms, extraArg, location, radius) {
     
     if(location) {
         
         geocoder.geocode( { 'address': location}, function(results, status) {
               if (status == 'OK') {
                   
-                  if(terms && !extraArg) {
+                  //THE AMOUNT OF IF-ELSES AND REPEATED CODE IS RIDICULOUS, HAS TO BE REFACTORED!
+                  if(terms && !extraArg && radius) {
+                      
                         var request = {
                             key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
                             keyword: terms,
                             location: results[0].geometry.location,
-                            radius: '1500',
+                            radius: radius,
                         };
 
-                    }else if(terms && extraArg){
+                    }else if(terms && extraArg && radius){
+                        var request = {
+                            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                            keyword: extraArg + ' ' + terms,
+                            location: results[0].geometry.location,
+                            radius: radius,
+                        };
+                        
+                    }else if(terms && extraArg && !radius){
                         var request = {
                             key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
                             keyword: extraArg + ' ' + terms,
@@ -182,8 +222,22 @@ function performRadarSearchByTerms(terms, extraArg, location) {
                             radius: '1500',
                         };
 
-                    }else if (!terms && extraArg){
+                    }else if (!terms && extraArg && radius){
                          var request = {
+                            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                            keyword: extraArg,
+                            location: results[0].geometry.location,
+                            radius: radius,
+                        };
+                    }else if (terms && !extraArg && !radius) {
+                        var request = {
+                            key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                            keyword: terms,
+                            location: results[0].geometry.location,
+                            radius: '1500',
+                        };
+                    }else if (!terms && extraArg && !radius) {
+                        var request = {
                             key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
                             keyword: extraArg,
                             location: results[0].geometry.location,
@@ -202,32 +256,53 @@ function performRadarSearchByTerms(terms, extraArg, location) {
         
     }else{
         
-        console.log("tippi tappi");
-        
-        if(terms && !extraArg) {
-            var request = {
-                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-                keyword: terms,
-                location: new google.maps.LatLng(60.192059, 24.945831),
-                radius: '25000',
-            };
+          //THE AMOUNT OF IF-ELSES AND REPEATED CODE IS RIDICULOUS, HAS TO BE REFACTORED!
+          if(terms && !extraArg && radius) {
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: terms,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: radius,
+                };
 
-        }else if(terms && extraArg){
-            var request = {
-                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-                keyword: extraArg + ' ' + terms,
-                location: new google.maps.LatLng(60.192059, 24.945831),
-                radius: '25000',
-            };
+            }else if(terms && extraArg && radius){
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: extraArg + ' ' + terms,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: radius,
+                };
 
-        }else if (!terms && extraArg){
-             var request = {
-                key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
-                keyword: extraArg,
-                location: new google.maps.LatLng(60.192059, 24.945831),
-                radius: '25000',
-            };
-        }
+            }else if(terms && extraArg && !radius){
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: extraArg + ' ' + terms,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '20000',
+                };
+
+            }else if (!terms && extraArg && radius){
+                 var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: extraArg,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: radius,
+                };
+            }else if (terms && !extraArg && !radius) {
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: terms,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '20000',
+                };
+            }else if (!terms && extraArg && !radius) {
+                var request = {
+                    key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
+                    keyword: extraArg,
+                    location: new google.maps.LatLng(60.192059, 24.945831),
+                    radius: '20000',
+                };
+            }
 
         placesService.radarSearch(request, processRadarResults);
         
@@ -239,7 +314,7 @@ function performRadarSearchByTerms(terms, extraArg, location) {
 }
 
 
-function searchFromServiceMap(input, location){
+function searchFromServiceMap(input, location, radius){
     
     if(location) {
         
@@ -252,22 +327,40 @@ function searchFromServiceMap(input, location){
                     var serviceMapLng = parseFloat(results[0].geometry.location.lng()).toFixed(5);
                       
                       
-                    if (input) {
+                    if (input && radius) {
+                        var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
+                        
+                        $.ajax({
+                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance='+radius+'',
+                              dataType: 'jsonp',
+                              'success': processServiceMapResults  
+                        });
+
+                    }else if (!input && radius) {
+                        $.ajax({
+                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance='+radius+'',
+                              dataType: 'jsonp',
+                              'success': processServiceMapResults  
+                        });
+
+                    }else if (input && !radius) {
+                        
                         var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
 
                         $.ajax({
-                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance=500',
+                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance=1000',
                               dataType: 'jsonp',
                               'success': processServiceMapResults  
                         });
-
+                        
+                        
                     }else{
                         $.ajax({
-                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance=500',
+                              url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet&lat='+serviceMapLat+'&lon='+serviceMapLng+'&distance=1000',
                               dataType: 'jsonp',
                               'success': processServiceMapResults  
                         });
-
+                        
                     }
 
 
@@ -280,7 +373,28 @@ function searchFromServiceMap(input, location){
         
     }else{
         
-        if (input) {
+        var helsinkiLat = '60.19206';
+        var helsinkiLng = '24.94583';
+            
+        if (input && radius) {
+            
+            var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
+
+            $.ajax({
+                  url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search='+convertedInput+'&lat='+helsinkiLat+'&lon='+helsinkiLng+'&distance='+radius+'',
+                  dataType: 'jsonp',
+                  'success': processServiceMapResults  
+            });
+
+        }else if (!input && radius) {
+            $.ajax({
+                  url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet&lat='+helsinkiLat+'&lon='+helsinkiLng+'&distance='+radius+'',
+                  dataType: 'jsonp',
+                  'success': processServiceMapResults  
+            });
+
+        }else if (input && !radius) {
+
             var convertedInput = input.replace(/ /gi, "+").replace(/ä/gi, "%E4").replace(/ö/gi, "%F6");
 
             $.ajax({
@@ -289,6 +403,7 @@ function searchFromServiceMap(input, location){
                   'success': processServiceMapResults  
             });
 
+
         }else{
             $.ajax({
                   url: 'http://www.hel.fi/palvelukarttaws/rest/v2/unit/?search=Koira-alueet',
@@ -296,7 +411,7 @@ function searchFromServiceMap(input, location){
                   'success': processServiceMapResults  
             });
 
-        }  
+        } 
         
         
         
@@ -306,15 +421,6 @@ function searchFromServiceMap(input, location){
                
 }
 
-function performTextSearch() {
-var request = {
-    location: new google.maps.LatLng(60.192059, 24.945831),
-    radius: '25000',
-    query: 'Musti ja Mirri'
-};
-
-placesService.textSearch(request, textCallback);
-}
 
 
 function processRadarResults(results, status) {
@@ -324,8 +430,6 @@ function processRadarResults(results, status) {
     }
     
     
-    
-
     $("#sidebar-content-wrapper").empty();
     console.log(results);
 
@@ -557,6 +661,13 @@ function getNextPlaces() {
                 
                 
             }else{
+                $('#places-show-more').css('display', 'none');
+                var sidebarFooterChildCount = document.getElementById("sidebar-footer").childElementCount;
+                
+                if(sidebarFooterChildCount == 1) {
+                    $('#sidebar-footer').append("<p class=\"no-more-results-msg\">Sorry, couldn't find any more results!</p>");
+                }
+                
                 console.log("radarArray:")
                 console.log(radarArray);
                 console.log("detailsArray:")

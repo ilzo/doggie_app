@@ -9,6 +9,8 @@ class Search
     
     protected $location;
     
+    protected $radius;
+    
     protected $categoryChoice;
     
     public function getSearch()
@@ -29,6 +31,16 @@ class Search
     public function setLocation($location)
     {
         $this->location = $location;
+    }
+    
+    public function getRadius()
+    {
+        return $this->radius;
+    }
+
+    public function setRadius($radius)
+    {
+        $this->radius = $radius;
     }
     
     public function getCategoryChoice()
