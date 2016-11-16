@@ -78,4 +78,45 @@ public function resultsAction($input, $location, $radius, $categories){
     ));  
 }
     
+    
+    
+public function eventsAction(Request $request){
+        
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search, array(
+            'action' => $this->generateUrl('MetropoliaDoggieBundle_events'),
+            'method' => 'POST',
+        ));
+
+        
+        if ($request->isMethod('POST')) {
+            
+            $form->handleRequest($request);
+            $searchData = $form->getData();
+            
+            
+            if (($form->isSubmitted())) {
+                
+                $response = $this->forward('MetropoliaDoggieBundle:Page:results', array(
+                    'input' => $searchData->getSearch(),
+                    'location' => $searchData->getLocation(),
+                    'radius' => $searchData->getRadius(),
+                    'categories' => $searchData->getCategoryChoice()
+                ));
+                
+                return $response;
+                return $this->redirect($this->generateUrl('MetropoliaDoggieBundle_events'));
+                
+            }
+            
+        }
+        
+      return $this->render('MetropoliaDoggieBundle:Page:events.html.twig', array(
+            'form' => $form->createView()
+        ));
+        
+             
+}    
+    
+    
 }

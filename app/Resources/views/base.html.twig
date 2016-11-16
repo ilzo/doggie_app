@@ -6,11 +6,8 @@
         {% block stylesheets %}
         
            <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
-			{% stylesheets '../web/bundles/metropoliadoggie/css/font-awesome.min.css' %}
-			<link rel="stylesheet" href="{{ asset_url }}" />
-			{% endstylesheets %}
-        
-            {% stylesheets filter='cssrewrite' 
+            {% stylesheets filter='cssrewrite'
+                '../web/bundles/metropoliadoggie/css/font-awesome.min.css'
                 '../web/bundles/metropoliadoggie/css/normalize.css'
                 '../web/bundles/metropoliadoggie/css/fontello.css'
                 '../web/bundles/metropoliadoggie/css/animate.css'
@@ -86,7 +83,7 @@
                   <button class="navbar-btn nav-button wow fadeInRight" data-wow-delay="0.6s">Sign up</button>
               </div>
               <ul class="main-nav nav navbar-nav navbar-right">
-                <li class="wow fadeInDown" data-wow-delay="0s"><a class="active" href="#">Home</a></li>
+                <li class="wow fadeInDown" data-wow-delay="0.1s"><a href="{{ path('MetropoliaDoggieBundle_events') }}">Events</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a href="#">Meetups</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.2s"><a href="#">Dog walking</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.3s"><a href="#">Dog sitting</a></li>

@@ -5,7 +5,12 @@ MetropoliaDoggieBundle_home:
     
 MetropoliaDoggieBundle_results:
     path:     /results
-    defaults: { _controller: RandomsoftVisionsourceBundle:Page:results }
+    defaults: { _controller: MetropoliaDoggieBundle:Page:results }
+    methods: [GET]
+    
+MetropoliaDoggieBundle_events:
+    path:     /events
+    defaults: { _controller: MetropoliaDoggieBundle:Page:events }
     methods: [GET]
         
 
