@@ -46,7 +46,6 @@ html, body {
 */
 
 
-
 .name-of-the-event a{
 	color:#6E6E6E;
 }
@@ -1102,6 +1101,10 @@ background-color: #088A82;
     margin-right: auto; 
 	margin-top:30px;
 }
+    
+.event-item {
+    text-align: center;  
+}
 
 
 }
@@ -1318,6 +1321,10 @@ background-color: #088A82;
 }
 .single-footer ul li a {
   font-size: 13px;
+}
+    
+.event-item {
+    text-align: center;  
 }
     
 .img-responsive{

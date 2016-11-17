@@ -60,13 +60,12 @@
                                 <div class="form-group">
                                     {{ form_widget(form.radius, { 'id': 'radius-select',  'attr': { 'class' : 'form-control' }}) }}
                                 </div>
-            
-                            {{ form_row(form.categoryChoice, {'label': 'Categories:'}) }}
-                            
-                            <br>
-
+                            <div class="category-container">
+                                {{ form_row(form.categoryChoice, {'label': 'Categories'}) }}
+                            </div>
+                        
                             <input type="submit" class="btn" value="Search" /><br>
-
+                                
 
                             {{ form_end(form) }}
                             
