@@ -4615,6 +4615,50 @@ html, body {
     margin: 0px 0 12px 0;
 }
 
+#events-container {
+    min-height: 450px;
+}
+
+.event-submit-link {
+    font-family: 'Raleway', sans-serif;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    outline: none;
+    color:#6E6E6E;
+    width: 100%;
+    text-align: left;
+    padding: 0 0 0 0;
+    margin: auto;
+    
+}
+
+#loader {
+    position: relative; 
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: 4.5em auto 0 auto;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #088A82;
+    width: 100px;
+    height: 100px;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /******************************************/
 /********* BOOTSTRAP TEMPLATE CSS  ********/
 /******************************************/

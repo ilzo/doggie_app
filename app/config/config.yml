@@ -80,6 +80,9 @@ fos_user:
         confirmation:
             enabled: true
             template: Email/confirmation.email.twig
+            
+#fos_js_routing:
+    #routes_to_expose: [ MetropoliaDoggieBundle_single_event ]
         
 # Assetic Configuration
 assetic:

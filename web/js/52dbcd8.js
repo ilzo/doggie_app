@@ -82,6 +82,23 @@ $.when(linkedEventsRequest1, linkedEventsRequest2).done(function(data1, data2) {
   
 });
 
+
+$( document ).ready(function() {
+    
+    
+    /*
+    $('.content-area .container a').click(function(event) {
+        event.preventDefault();
+        console.log("clicked a link");
+    });
+    */
+    
+    
+    
+});
+
+
+
 linkedEventsRequest1.fail(function( jqXHR, textStatus ) {
   console.log( "Request failed: " + textStatus );
 });
@@ -269,7 +286,17 @@ function outputEvents(events) {
             eventDate = events[i].start.date;
         }
         
-        item = $('<div id="'+i+'" class="col-md-3 event-item"><a href="#"><img class="img-responsive" src="'+events[i].images[0]+'"></a><h3 class="name-of-the-event"><a href="#">'+events[i].name+'</a></h3><p>'+eventDate+'</p><p>'+events[i].desc_short+'</p></div>');
+        var encodedObj = encodeURIComponent(JSON.stringify(events[i]));
+        
+        //var encodedObj = JSON.stringify(events[i]);
+        
+        var backendPath = Routing.generate('MetropoliaDoggieBundle_single_event', { id: i});
+        
+        //console.log(encodedObj);
+        
+        //item = $('<div id="'+i+'" class="col-md-3 event-item"><a href="#"><img class="img-responsive" src="'+events[i].images[0]+'"></a><h3 class="name-of-the-event"><a  href="#">'+events[i].name+'</a></h3><p>'+eventDate+'</p><p>'+events[i].desc_short+'</p></div>');
+        
+        item = $('<div id="'+i+'" class="col-md-3 event-item"><form class="event-form" method="post" action="'+backendPath+'"><a href="#"><img class="img-responsive" src="'+events[i].images[0]+'"></a><h3 class="name-of-the-event"><button type="submit" class="event-submit-link">'+events[i].name+'</button></h3><p>'+eventDate+'</p><p>'+events[i].desc_short+'</p><input type="hidden" name="event-object-data" value="'+encodedObj+'"></form></div>');
         
         row.append(item);
         
@@ -286,6 +313,11 @@ function outputEvents(events) {
             
           
     }
+    
+    $('.content-area .container a').click(function(e){ prepareSingleEvent(e); return false; });
+    
+    
+    document.getElementById("loader").style.display = "none";
       
 }
 

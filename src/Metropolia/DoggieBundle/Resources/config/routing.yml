@@ -11,7 +11,14 @@ MetropoliaDoggieBundle_results:
 MetropoliaDoggieBundle_events:
     path:     /events
     defaults: { _controller: MetropoliaDoggieBundle:Page:events }
-    methods: [GET]
+    methods: [GET, POST]
+    
+MetropoliaDoggieBundle_single_event:
+  path:  /events/{id}/
+  defaults: { _controller: MetropoliaDoggieBundle:Page:showSingleEvent }
+  methods: [POST]
+  options:
+        expose: true
         
 
     
