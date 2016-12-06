@@ -4396,6 +4396,8 @@ Copyright (c) 2015 Daniel Eden
   to { opacity: 0; transform: scale(1.5); }
 }
 html, body {
+    overflow-y: scroll;
+    overflow-x: hidden;
     position:relative;
     min-height: 100%;
     margin: 0;
@@ -4634,6 +4636,31 @@ html, body {
     
 }
 
+img.event-single-img {
+    max-width: 100%;
+}
+
+
+#event-start-time-container {
+    text-align: right;
+    padding: 0;
+    width: 22%;
+}
+
+#event-end-time-container {
+    text-align: left;
+    padding: 0;
+}
+
+.event-time {
+    margin-top: 4px;
+}
+
+.event-time-dash {
+    text-align: center;
+}
+
+
 #loader {
     position: relative; 
     z-index: 1;
@@ -4658,6 +4685,7 @@ html, body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 
 /******************************************/
 /********* BOOTSTRAP TEMPLATE CSS  ********/
@@ -5557,7 +5585,18 @@ background-color: #088A82;
 .event-item {
     text-align: center;  
 }
+    
+.event-submit-link {
+    text-align: center;
+}
 
+#event-end-time-container, #event-start-time-container {
+   width: 48.666667%;
+}
+
+.event-time {
+    font-size: 15px;  
+}
 
 }
 
@@ -5799,6 +5838,15 @@ background-color: #088A82;
 .category-container {
     margin: 0px 0px 12px 24px;
 }
+    
+    
+.event-submit-link {
+    text-align: center;
+}
+    
+ #event-start-time-container {
+    width: 40%;
+}
         
 }
 
@@ -6037,7 +6085,14 @@ background-color: #088A82;
     color: #6E6E6E;
 }
     
+.event-submit-link {
+    text-align: center;
+}
     
+#event-start-time-container {
+    width: 28%;
+}
+      
 }
 
 @media (min-width: 969px) and (max-width: 1169px){
@@ -6128,6 +6183,10 @@ background-color: #088A82;
     
 .slider-content {
     top: 5%;
+}
+    
+#event-start-time-container {
+    width: 25%;
 }
 
 }

@@ -296,7 +296,7 @@ function outputEvents(events) {
         
         //item = $('<div id="'+i+'" class="col-md-3 event-item"><a href="#"><img class="img-responsive" src="'+events[i].images[0]+'"></a><h3 class="name-of-the-event"><a  href="#">'+events[i].name+'</a></h3><p>'+eventDate+'</p><p>'+events[i].desc_short+'</p></div>');
         
-        item = $('<div id="'+i+'" class="col-md-3 event-item"><form class="event-form" method="post" action="'+backendPath+'"><a href="#"><img class="img-responsive" src="'+events[i].images[0]+'"></a><h3 class="name-of-the-event"><button type="submit" class="event-submit-link">'+events[i].name+'</button></h3><p>'+eventDate+'</p><p>'+events[i].desc_short+'</p><input type="hidden" name="event-object-data" value="'+encodedObj+'"></form></div>');
+        item = $('<div id="'+i+'" class="col-md-3 event-item"><form class="event-form" method="post" action="'+backendPath+'"><button type="submit" class="event-submit-link"><img class="img-responsive" src="'+events[i].images[0]+'"></button><h3 class="name-of-the-event"><button type="submit" class="event-submit-link">'+events[i].name+'</button></h3><p>'+eventDate+'</p><p>'+events[i].desc_short+'</p><input type="hidden" name="event-object-data" value="'+encodedObj+'"></form></div>');
         
         row.append(item);
         
