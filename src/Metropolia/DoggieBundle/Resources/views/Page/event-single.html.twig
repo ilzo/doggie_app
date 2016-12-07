@@ -75,13 +75,13 @@
         </div>
 
 <div class="content-area">
-    <div id="events-container" class="container">
+    <div id="single-event-container" class="container">
 
         
         {% if event %}
         <div class="row">
             <div class="col-lg-12">
-                    <h1 class="page-header">{{ event.name }}</h1>
+                    <h1 class="page-header single-event-title">{{ event.name }}</h1>
             </div>
         </div>
         
@@ -104,13 +104,13 @@
         {% if event.start %}
                         
             <div class="row">
-                <div class="col-lg-12">
-                    <h3>Event times</h3>
+                <div class="col-lg-12 page-title">
+                    <h2>Event times</h2>
                 </div>
             </div>
             
             <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 event-time-container">
                         {% if event.start is iterable %}
                             <div id="event-start-time-container" class="col-xs-5">
                                 {% for start in event.start %}
@@ -165,10 +165,53 @@
                     </div>
             </div>           
         {% endif %}
-                
-                
-
-        {{dump(event)}}
+        
+        <div class="row">
+            <div class="col-lg-12 page-title">
+                <h2>Location</h2>
+            </div>
+        </div>
+        <div class="row">
+          
+            <div class="col-md-4">
+                <h3>{{ event.location_name }}</h3>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>{{ event.location_street_addr }},  {{ event.location_postal_code }} {{ event.location_locality }}</h4>
+            </div>
+            
+        </div>
+        
+        {% if event.location_email %}
+        <div class="row">
+            <div class="col-md-4">
+                <h4>{{ event.location_email }}</h4>
+            </div>
+            
+        </div>
+        {% endif %}
+        {% if event.location_tel %}
+        <div class="row">
+            <div class="col-md-4">
+                <h4>{{ event.location_tel }}</h4>
+            </div>
+            
+        </div>
+        {% endif %}
+        
+        <hr>
+        <div class="row">
+            <div class="col-lg-12 single-event-desc">
+                {{ event.desc_long|raw }}
+            </div>
+            <div class="spacer"></div>
+            <a class="single-event-back-link" href="{{ path('MetropoliaDoggieBundle_events') }}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>Back to Events</a>
+            <div class="spacer"></div>
+        </div>
+        
         {% endif %}
         
      </div>

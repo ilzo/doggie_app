@@ -6,6 +6,7 @@ var allEventResults = [];
 var eventObject;
 var formattedEventObjects = [];
 var eventName;
+var eventLocation;
 var eventDescShort;
 var eventDescLong;
 var shortenThis;
@@ -28,59 +29,108 @@ var linkedEventsRequest2 = $.ajax({
 
 
 $.when(linkedEventsRequest1, linkedEventsRequest2).done(function(data1, data2) {
-  linkedEventsData1 = data1;
-  linkedEventsData2 = data2;
-    
-  if( linkedEventsData1 ) {
-      
-    $.each( linkedEventsData1[0]['data'], function( key, value ) {
-        linkedEventsResults1.push(value);
-    });
-
-  }
-    
-    
-  if( linkedEventsData2 ) {
-      
-    $.each( linkedEventsData2[0]['data'], function( key, value ) {
-        linkedEventsResults2.push(value);
-    });
-     
-    
-  }
-    
-    console.log("linkedEventsResults1:");  
-    console.log(linkedEventsResults1);
-    
-    console.log("linkedEventsResults2:");  
-    console.log(linkedEventsResults2);
-    
-    
-    allEventResults = linkedEventsResults1.concat(linkedEventsResults2);
-    
-    allEventResults.sort(compare);
-    
-    console.log("calling duplicate removal:");
-    var uniqueArray = removeDuplicates(allEventResults, "id");
-    
-    console.log("event results: ");  
-    console.log(uniqueArray);
-    
-    
-    var containerArr = sortRecurrentEvents(uniqueArray);
-    
-    console.log("Container array:");
-    console.log(containerArr);
-    
-    formatEventData(containerArr);
-    
-    formattedEventObjects.reverse();
-    console.log("formatted events:");
-    console.log(formattedEventObjects);
-    
-    outputEvents(formattedEventObjects);
   
+    linkedEventsData1 = data1;
+    linkedEventsData2 = data2;
+    
+    initEventData(linkedEventsData1, linkedEventsData2);
+    
 });
+
+
+function initEventData (data1, data2) {
+    
+    
+    if( data1 ) {
+      
+        $.each( data1[0]['data'], function( key, value ) {
+            linkedEventsResults1.push(value);
+        });
+
+    }
+    
+    if( data2 ) {
+      
+        $.each( data2[0]['data'], function( key, value ) {
+            linkedEventsResults2.push(value);
+        });
+      
+    
+        $.each( linkedEventsResults2, function( key, value ) {
+            //console.log(value.location['@id']);
+        
+            var locationRequest = $.ajax({
+                url: value.location['@id'],
+                dataType: 'json' 
+            });
+        
+            $.when(locationRequest).done(function(response) { 
+                var locationData = response;
+            
+                //console.log(locationData);
+            
+                linkedEventsResults2[key]['location'] = locationData;
+        
+            });
+        
+            locationRequest.fail(function( jqXHR, textStatus ) {
+                console.log( "Request failed: " + textStatus );
+            });
+        
+        
+        
+        }); 
+    
+    }
+    
+}
+
+linkedEventsRequest1.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+linkedEventsRequest2.fail(function( jqXHR, textStatus ) {
+  console.log( "Request failed: " + textStatus );
+});
+
+
+$( document ).ajaxStop(function() {
+    
+    setTimeout(function(){ 
+
+        console.log("linkedEventsResults1:");  
+        console.log(linkedEventsResults1);
+
+        console.log("linkedEventsResults2:");  
+        console.log(linkedEventsResults2);
+
+
+        allEventResults = linkedEventsResults1.concat(linkedEventsResults2);
+
+        allEventResults.sort(compare);
+
+        var uniqueArray = removeDuplicates(allEventResults, "id");
+
+        console.log("event results: ");  
+        console.log(uniqueArray);
+
+
+        var containerArr = sortRecurrentEvents(uniqueArray);
+
+        console.log("Container array:");
+        console.log(containerArr);
+
+        formatEventData(containerArr);
+
+        formattedEventObjects.reverse();
+        console.log("formatted events:");
+        console.log(formattedEventObjects);
+
+        outputEvents(formattedEventObjects);
+        
+     }, 800);
+});
+
 
 
 $( document ).ready(function() {
@@ -95,16 +145,6 @@ $( document ).ready(function() {
     
     
     
-});
-
-
-
-linkedEventsRequest1.fail(function( jqXHR, textStatus ) {
-  console.log( "Request failed: " + textStatus );
-});
-
-linkedEventsRequest2.fail(function( jqXHR, textStatus ) {
-  console.log( "Request failed: " + textStatus );
 });
 
 
@@ -193,7 +233,8 @@ function formatEventData (container) {
                 eventDescShort = shortenThis.substring(0, 80) + "...";
             }
             
-            eventObject = {name : value[0].name.fi, start : reformatTime(value[0].start_time), end : reformatTime(value[0].end_time), desc_short : eventDescShort, desc_long : value[0].description.fi, images : eventImages};
+            
+            eventObject = {name : value[0].name.fi, start : reformatTime(value[0].start_time), end : reformatTime(value[0].end_time), desc_short : eventDescShort, desc_long : value[0].description.fi, images : eventImages, location_name : value[0].location.name.fi, location_street_addr : value[0].location.street_address.fi, location_locality : value[0].location.address_locality.fi, location_email : value[0].location.email, location_tel : value[0].location.telephone.fi, location_postal_code: value[0].location.postal_code};
             formattedEventObjects.push(eventObject);
             
         }else{
@@ -228,7 +269,7 @@ function formatEventData (container) {
                 
             }
             
-            eventObject = {name : eventName, start : eventStartTimes, end : eventEndTimes, desc_short : eventDescShort, desc_long : eventDescLong, images : eventImages};
+            eventObject = {name : eventName, start : eventStartTimes, end : eventEndTimes, desc_short : eventDescShort, desc_long : eventDescLong, images : eventImages, location_name : value[0].location.name.fi, location_street_addr : value[0].location.street_address.fi, location_locality : value[0].location.address_locality.fi, location_email : value[0].location.email, location_tel : value[0].location.telephone.fi, location_postal_code: value[0].location.postal_code};
             formattedEventObjects.push(eventObject);
             
             eventStartTimes = [];
