@@ -141,25 +141,32 @@
                         {% if event.end is iterable %}
                             <div id="event-end-time-container" class="col-xs-5">
                                 {% for end in event.end %}
-                                <div class="col-xs-2 event-time-dash">–</div>
+                                    {% if end %}
+                                        <div class="col-xs-2 event-time-dash">–</div>
+                                    
                                         {% if end.time %}
                                             <h4 class="event-time">{{ end.date }} , {{ end.time }}</h4>
                                         {% else %}
                                             <h4 class="event-time">{{ end.date }}</h4>
                                         {% endif %}
 
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <div id="event-end-time-container" class="col-xs-5">
-                                <div class="col-xs-2 event-time-dash">–</div>
-                                {% if event.end.time %}    
-                                    <h4 class="event-time">{{ event.end.date }} , {{ event.end.time }}</h4>
-                                {% else %}   
-                                    <h4 class="event-time">{{ event.end.date }}</h4>
-                                {% endif %}
+                            {% if event.end %}
+                                <div id="event-end-time-container" class="col-xs-5">
+                                    <div class="col-xs-2 event-time-dash">–</div>
+                                    {% if event.end.time %}    
+                                        <h4 class="event-time">{{ event.end.date }} , {{ event.end.time }}</h4>
+                                    {% else %}   
+                                        <h4 class="event-time">{{ event.end.date }}</h4>
+                                    {% endif %}
 
-                            </div>
+                                </div>
+                        
+                            {% endif %}
+                        
                         {% endif %}
                         
                     </div>
