@@ -8,13 +8,14 @@ var detailsArray = [];
 var searchedCategories = [];
 var serviceCategories = [];
 
-$( document ).ready(function() {
-    
 /*
-$( "#search-box" ).autocomplete({
-  source: searchArray
-});
-*/
+ *
+ * This javascript file is responsible for handling the service search functionality     
+ *
+ */
+
+
+$( document ).ready(function() {
     
     var searchInput = $("#input-data").data("id");
     
@@ -25,6 +26,9 @@ $( "#search-box" ).autocomplete({
     $("#search-data-container").find('.categories-data').each(function(){
         serviceCategories.push($(this).data("id"));
     });
+    
+    
+    // Execute if user has specified categories with the service search
     
     if(serviceCategories.length > 0) {
       
@@ -68,21 +72,26 @@ $( "#search-box" ).autocomplete({
 
 });
 
+// Services/Places are searched from Google Maps API via radarSearch method.
+// radarSearch can find more places compared to other methods such as textSearch, however,
+// more detailed place information has to be queried using getDetails() -method.
+// radarSearch data is stored into radarArray and getDetails data into detailsArray.
+// Two explicit functions are defined for searching google place information by categories
+// and keywords. 
+
 function performRadarSearchByCategory(category, terms, location, radius) {
 
     if($.inArray(category, searchedCategories) == -1) {
 
         console.log("category " + category + " was not found in searchedCategories");
         
-        //If user has specified a location for search, the address has to be geocoded into LatLng-object
-        //and placed as a location property into arraySearch request
+        // If user has specified a location for search, the address has to be geocoded into LatLng-object
+        // and placed as a location property into arraySearch request
         if(location) {
             
             geocoder.geocode( { 'address': location}, function(results, status) {
               if (status == 'OK') {
-                //var geocodeResult = results[0].geometry.location;
-                //console.log("geocodeResult:");
-                
+           
                 var testLat = parseFloat(results[0].geometry.location.lat()).toFixed(5);
                 var testLng = parseFloat(results[0].geometry.location.lng()).toFixed(5);
                  
@@ -132,10 +141,6 @@ function performRadarSearchByCategory(category, terms, location, radius) {
               }
               
             });
-            
-            
-            
-            
             
         }else{
             
@@ -196,7 +201,7 @@ function performRadarSearchByTerms(terms, extraArg, location, radius) {
         geocoder.geocode( { 'address': location}, function(results, status) {
               if (status == 'OK') {
                   
-                  //THE AMOUNT OF IF-ELSES AND REPEATED CODE IS RIDICULOUS, HAS TO BE REFACTORED!
+                  // THE AMOUNT OF IF-ELSES AND REPEATED CODE IS RIDICULOUS, HAS TO BE REFACTORED!
                   if(terms && !extraArg && radius) {
                       
                         var request = {
@@ -256,7 +261,7 @@ function performRadarSearchByTerms(terms, extraArg, location, radius) {
         
     }else{
         
-          //THE AMOUNT OF IF-ELSES AND REPEATED CODE IS RIDICULOUS, HAS TO BE REFACTORED!
+          // THE AMOUNT OF IF-ELSES AND REPEATED CODE IS RIDICULOUS, HAS TO BE REFACTORED!
           if(terms && !extraArg && radius) {
                 var request = {
                     key: 'AIzaSyAZ3ZAumNn6WnyDSf7XbiZi5WhZC6foPCs',
@@ -306,13 +311,11 @@ function performRadarSearchByTerms(terms, extraArg, location, radius) {
 
         placesService.radarSearch(request, processRadarResults);
         
-        
     }
-    
-    
-        
+         
 }
 
+// This function handles making API requests to Helsinki Service Map API
 
 function searchFromServiceMap(input, location, radius){
     
@@ -320,9 +323,7 @@ function searchFromServiceMap(input, location, radius){
         
         geocoder.geocode( { 'address': location}, function(results, status) {
                   if (status == 'OK') {
-                    //var geocodeResult = results[0].geometry.location;
-                    //console.log("geocodeResult:");
-
+                  
                     var serviceMapLat = parseFloat(results[0].geometry.location.lat()).toFixed(5);
                     var serviceMapLng = parseFloat(results[0].geometry.location.lng()).toFixed(5);
                       
@@ -362,8 +363,6 @@ function searchFromServiceMap(input, location, radius){
                         });
                         
                     }
-
-
 
                   } else {
                     alert('Geocode was not successful for the following reason: ' + status);
@@ -413,14 +412,9 @@ function searchFromServiceMap(input, location, radius){
 
         } 
         
-        
-        
-        
     }
-    
-               
+                
 }
-
 
 
 function processRadarResults(results, status) {
@@ -438,7 +432,6 @@ function processRadarResults(results, status) {
         markers = [];
         latLngList = [];
         markerID = 0;
-        //radarArray = [];
     } 
 
     for (var i = 0, result; result = results[i]; i++) {
@@ -473,7 +466,6 @@ function processRadarResults(results, status) {
 
     }
 
-
     if(results.length > 0) {
         $('#places-show-more').unbind( "click" );
         $('#places-show-more').unbind( "dblclick" );
@@ -490,18 +482,14 @@ function processRadarResults(results, status) {
     
 }
 
-
 function processRadarArray() {
-    //$("#sidebar-content-wrapper").empty();
-
-
+    
     if(markers.length > 0){
         markers.forEach(markerRemover);
         markers = [];
         latLngList = [];
         markerID = 0;
     }
-
 
     for(var i = 0; i < 8; i++) {
 
@@ -532,6 +520,7 @@ function processRadarArray() {
     console.log(radarArray); 
 }
 
+// Function to be called once user presses the button to fetch more search results from data arrays  
 
 function getNextPlaces() {
     var mapItemId = $(".sidebar-item:last-child").attr('id');
@@ -546,9 +535,8 @@ function getNextPlaces() {
 
         for(var i = start; i < end; i++) {
             
-            //Check if object in radarArray is from Google Maps or Service Map API
+                // Check if object in radarArray is from Google Maps or Service Map API
                 if(radarArray[i].place_id){
-                    
                     
                     if (detailsArray.filter(function(e) { return e.place_id == radarArray[i].place_id; }).length == 0) {
 
@@ -571,9 +559,7 @@ function getNextPlaces() {
 
                     }
                     
-                    
                 }else if (radarArray[i].id){
-                    
                     
                     if (detailsArray.filter(function(e) { return e.id == radarArray[i].id; }).length == 0) {
 
@@ -591,13 +577,8 @@ function getNextPlaces() {
 
 
                     }
-                    
-                    
-                        
-                        
+                         
                 }
-
-            
 
         }
 
@@ -609,7 +590,7 @@ function getNextPlaces() {
             if(radarArray[i]) {
                 
                 
-                //Check if object in radarArray is from Google Maps or Service Map API
+                // Check if object in radarArray is from Google Maps or Service Map API
                 if(radarArray[i].place_id){
                     
                     
@@ -655,10 +636,6 @@ function getNextPlaces() {
                     }
                     
                 }
-                
-                
-                
-                
                 
             }else{
                 $('#places-show-more').css('display', 'none');
@@ -677,29 +654,9 @@ function getNextPlaces() {
 
         }
         
-        
-        
-        /*
-
-        for(var i = end - 1; i > start; i--) {
-
-            if(radarArray[i]) {
-                console.log("the last index of radarArray: " + i);
-                end = i;
-                console.log(radarArray);
-                console.log(detailsArray);
-                break;
-            }
-
-        }
-        */
-        
-        
-
     }
 
     console.log(detailsArray.length);
-
 
 }
 
@@ -710,10 +667,8 @@ function textCallback(results, status, pagination) {
     return;
     }
 
-
     console.log(results);
-    //console.log(results[0].geometry.location);
-
+    
     var detailsRequest = {
         placeId: results[0].place_id
     }
@@ -727,30 +682,6 @@ function detailsCallback(place, status) {
         console.error(status);
         return;
       }
-
-
-     /*
-    if($.inArray(place, detailsArray) == -1) {
-            console.log("pushing place details into detailsArray");
-            detailsArray.push(place);
-    }
-
-
-
-    if(detailsArray.length == 0) {
-        console.log("pushing place details into detailsArray");
-        detailsArray.push(place);
-    }else{
-        for (var i = 0; i < detailsArray.length; i++) {
-            if (detailsArray[i] === place) {
-                console.log("pushing place details into detailsArray");
-                detailsArray.push(place);
-                break;
-            }
-        }
-
-    }
-    */
 
     populateMap(place);
 
@@ -766,15 +697,6 @@ function populateMap(place) {
         detailsArray.push(place);
     }
 
-    //detailsArray = jQuery.unique( detailsArray );
-
-/*
-
-    detailsArray = detailsArray.filter(function(item, pos) {
-        return detailsArray.indexOf(item) == pos;
-    });
-    */
-
     markerMaker(place, markerID);
     //  Create a new viewpoint bound
     var bounds = new google.maps.LatLngBounds ();
@@ -786,10 +708,6 @@ function populateMap(place) {
     //  Fit these bounds to the map
     map.fitBounds (bounds);
 
-
-    //console.log(place);
-    //$("#sidebar-content-wrapper").append('<div id="map-item-'+markerID+'" data-id="'+place.place_id+'" class="sidebar-item">'+place.name+'</div>');
-    
     appendPlaceDetails(place, markerID)
     
     $(".sidebar-item:last-child").bind( "click", function() {
@@ -800,10 +718,6 @@ function populateMap(place) {
 
             var thisPlaceId = mapItemId.substring(9);
 
-            //showPlaceDetails(place);
-            
-            //var thisInfoMarker = marker.get(markerID);
-            //console.log(thisInfoMarker);
             var thismarker = markers[thisPlaceId];
 
             if(thismarker){
@@ -888,8 +802,7 @@ function processServiceMapResults(results){
 
 
 function appendPlaceDetails(value, markerID) {
-    //console.log("User clicked on " + value.name_fi);
-
+    
     var undefinedString = "Tietoa ei saatavilla";
 
     if(value.name_fi){
@@ -932,9 +845,6 @@ function appendPlaceDetails(value, markerID) {
     
     $("#sidebar-content-wrapper").append(thisMapItem);
 
-    //$("#place-info-container").empty();
-    //$(".wrapper .place-info").remove();
-   
 }
 
 function markerMaker(value, markerID){

@@ -13,11 +13,16 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
+
+// PageController receives HTTP requests and returns corresponding page templates as response 
+
 class PageController extends Controller
 {
+    
+    // Controller method for returning index page template and for 
+    // forwarding search form POST request to resultsAction method
+    
     public function indexAction(Request $request){
-        
-       
         
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search, array(
@@ -51,30 +56,12 @@ class PageController extends Controller
       return $this->render('MetropoliaDoggieBundle:Page:index.html.twig', array(
             'form' => $form->createView()
         ));
-        
-         /*
-        
-        
-        if ($request->isMethod('POST')) {
-            
-            
-          return $this->render('MetropoliaDoggieBundle:Page:index.html.twig', array(
-                'form' => $form->createView()
-            ));
-   
-        }
-        return $this->render('MetropoliaDoggieBundle:Page:index.html.twig');
-        
-        */
-        
-        
+             
 }
     
+// Controller method for returning search results template with form input data
     
 public function resultsAction($input, $location, $radius, $categories){
-    
-    //dump($input);
-    //dump($categories);
     
     return $this->render('MetropoliaDoggieBundle:Page:results.html.twig', array(
         'input' => $input,
@@ -85,6 +72,7 @@ public function resultsAction($input, $location, $radius, $categories){
 }
     
     
+// Controller method for returning events page  
     
 public function eventsAction(Request $request){
         
@@ -124,6 +112,8 @@ public function eventsAction(Request $request){
              
 }
     
+
+// Controller method for returning single event page  
     
 /**
  * @Route("/events/{id}/", options={"expose"=true}, name="MetropoliaDoggieBundle_single_event")

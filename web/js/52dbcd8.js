@@ -14,6 +14,13 @@ var eventStartTimes = [];
 var eventEndTimes = [];
 var eventImages = [];
 
+/*
+ *
+ * This javascript file is responsible for fetching all dog related events from Helsinki Linked Events API, processing and   
+ * reformatting the data and finally outputting the data into the front-end template.  
+ *
+ */
+
 
 var linkedEventsRequest1 = $.ajax({
     url: 'https://api.hel.fi/linkedevents/v1/event/?include=location&keyword=helmet%3A10689&text=koira&text=koirat&page_size=50',
@@ -94,6 +101,8 @@ linkedEventsRequest2.fail(function( jqXHR, textStatus ) {
 });
 
 
+// Important! Proceed the data processing after every single ajax request has been completed first
+
 $( document ).ajaxStop(function() {
     
     setTimeout(function(){ 
@@ -132,23 +141,6 @@ $( document ).ajaxStop(function() {
 });
 
 
-
-$( document ).ready(function() {
-    
-    
-    /*
-    $('.content-area .container a').click(function(event) {
-        event.preventDefault();
-        console.log("clicked a link");
-    });
-    */
-    
-    
-    
-});
-
-
-
 function compare(a,b) {
   if (a.description.fi < b.description.fi)
     return -1;
@@ -156,6 +148,8 @@ function compare(a,b) {
     return 1;
   return 0;
 }
+
+// Function used to order the recurrent event objects
 
 function sortRecurrentEvents (eventsArr) {
     var pointer = 1;
@@ -212,6 +206,8 @@ function sortRecurrentEvents (eventsArr) {
     
 }
 
+
+// Function to create custom event objects to be utilized by the application
 
 function formatEventData (container) {
     $.each( container, function( key, value ) {
@@ -356,7 +352,6 @@ function outputEvents(events) {
     }
     
     $('.content-area .container a').click(function(e){ prepareSingleEvent(e); return false; });
-    
     
     document.getElementById("loader").style.display = "none";
       
